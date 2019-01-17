@@ -7,20 +7,9 @@
 
 int main(int argc, char *argv[])
 {
-  Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.apmpc.geometry");
-
-  //Load the Glade file and instiate its widgets:
-  Glib::RefPtr<Gtk::Builder> builder;
-	try
-  {
-		builder = Gtk::Builder::create_from_file(UI_FILE);
-	}
-	catch (const Glib::FileError & ex)
-	{
-		std::cerr << ex.what() << std::endl;
-		return 1;
-	}
-	MainWindow* appwindow = 0;
-	builder->get_widget_derived("TopWindow", appwindow);
-    return app->run(*appwindow);
+	Gtk::Main kit(argc, argv);
+	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("../glade/wpn-gtk.glade");
+	Gtk::Window *window;
+	builder->get_widget("topWindow", window);
+    Gtk::Main::run(*window);
 }

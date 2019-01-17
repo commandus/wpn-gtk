@@ -15,7 +15,6 @@ commonlibs += -lgtkmm-2.4 -latkmm-1.6 -lgtk-x11-2.0 -lgdkmm-2.4 -lgiomm-2.4 -lpa
 AM_CXXFLAGS = -std=c++11
 
 nobase_dist_include_HEADERS = \
-	wpn-gtk.h \
 	top-window.h
 
 common_src =
