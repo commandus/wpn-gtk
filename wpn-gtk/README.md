@@ -11,5 +11,5 @@ wpn
 ## Dependencies
 
 ```
-sudo apt install libgtkmm-2.4-dev
+sudo apt install libgtkmm-3.0-dev
 ```
