@@ -3,13 +3,24 @@
 #include <gtkmm.h>
 #include "top-window.h"
 
-#define UI_FILE "src/geometry.ui"
+#define UI_FILE "../glade/wpn.glade3"
 
 int main(int argc, char *argv[])
 {
-	Gtk::Main kit(argc, argv);
-	Glib::RefPtr<Gtk::Builder> builder = Gtk::Builder::create_from_file("../glade/wpn-gtk.glade");
-	Gtk::Window *window;
-	builder->get_widget("topWindow", window);
-    Gtk::Main::run(*window);
+	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "com.commandus.wpn-gtk");
+	// Load the Glade file and instiate its widgets:
+	Glib::RefPtr<Gtk::Builder> builder;
+	try
+	{
+		builder = Gtk::Builder::create_from_file(UI_FILE);
+	}
+	catch (const Glib::FileError & ex)
+	{
+		std::cerr << ex.what() << std::endl;
+		return 1;
+	}
+	TopWindow* appwindow = 0;
+	builder->get_widget_derived("topWindow", appwindow);
+
+    return app->run(*appwindow);	
 }
