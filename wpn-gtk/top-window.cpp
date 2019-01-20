@@ -21,8 +21,8 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mRefBuilder->get_widget("treeviewClient", mTreeViewClient);
 	mRefBuilder->get_widget("treeviewMessage", mTreeViewMessage);
 
-	// mRefListStoreClient = gtk_builder_get_object(refBuilder, "liststoreClient");
-	//mRefBuilder->gtk_builder_get_object("liststoreMessage", mRefListStoreMessage);
+	mRefListStoreClient = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreClient"));
+	mRefListStoreMessage = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreMessage"));
 }
 
 void TopWindow::onButtonClickSend(int n) {
@@ -33,7 +33,8 @@ void TopWindow::onButtonClickSend(int n) {
 	if (mRefListStoreMessage) {
 		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
 		Gtk::TreeModel::Row row = *it;
-		row.set_value(0, 0);
+		std::string s = "message";
+		row.set_value <Glib::ustring>(0, s); 
 	}
 	std::cout << "The Button " << n << " was clicked, value: " << v << std::endl;
 }

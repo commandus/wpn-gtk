@@ -15,8 +15,8 @@ protected:
 	Gtk::Button *mButtonSend;
 	Gtk::TreeView *mTreeViewClient;
 	Gtk::TreeView *mTreeViewMessage;
-	Gtk::ListStore *mRefListStoreClient;
-	Gtk::ListStore *mRefListStoreMessage;
+	Glib::RefPtr<Gtk::ListStore> mRefListStoreClient;
+	Glib::RefPtr<Gtk::ListStore> mRefListStoreMessage;
 };
 
 #endif
