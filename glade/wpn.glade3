@@ -18,7 +18,7 @@
   </object>
   <object class="GtkListStore" id="liststoreMessage">
     <columns>
-      <!-- column-name name -->
+      <!-- column-name message -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -213,8 +213,6 @@
                   <object class="GtkTreeView" id="treeviewClient">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="opacity">0.98999999999999999</property>
-                    <property name="resize_mode">immediate</property>
                     <property name="model">liststoreClient</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selectionClient"/>
@@ -222,17 +220,13 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumnClient">
                         <property name="min_width">100</property>
-                        <property name="max_width">1000</property>
                         <property name="title" translatable="yes">Клиент</property>
-                        <property name="sort_column_id">0</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertextMessage">
                             <property name="cell_background_gdk">#ffffffffffff</property>
                             <property name="background_gdk">#ffffffffffff</property>
-                            <property name="foreground_gdk">#000000000000</property>
                           </object>
                           <attributes>
-                            <attribute name="width">10</attribute>
                             <attribute name="text">0</attribute>
                           </attributes>
                         </child>
@@ -260,13 +254,14 @@
                       <object class="GtkTreeSelection" id="treeview-selectionMessage"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumnName">
+                      <object class="GtkTreeViewColumn" id="treeviewcolumnMessage">
                         <property name="resizable">True</property>
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Сообщение</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertextName">
                             <property name="cell_background_gdk">#ffffffffffff</property>
+                            <property name="background_gdk">#ffffffffffff</property>
                           </object>
                           <attributes>
                             <attribute name="text">0</attribute>
