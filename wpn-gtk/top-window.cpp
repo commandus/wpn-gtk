@@ -9,7 +9,6 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 : Gtk::Window (cobject),
   mRefBuilder (refBuilder)
 {
-	
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
 	if (mEntryMessage) {
 	}
@@ -21,14 +20,20 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	}
 	mRefBuilder->get_widget("treeviewClient", mTreeViewClient);
 	mRefBuilder->get_widget("treeviewMessage", mTreeViewMessage);
-//	Glib::RefPtr<Gtk::ListStore> mRefTreeModelClient;
-//	Glib::RefPtr<Gtk::ListStore> mRefTreeModelMessage;
+
+	// mRefListStoreClient = gtk_builder_get_object(refBuilder, "liststoreClient");
+	//mRefBuilder->gtk_builder_get_object("liststoreMessage", mRefListStoreMessage);
 }
 
 void TopWindow::onButtonClickSend(int n) {
 	std::string v = "";
 	if (mEntryMessage) {
 		v = mEntryMessage->get_text();
+	}
+	if (mRefListStoreMessage) {
+		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
+		Gtk::TreeModel::Row row = *it;
+		row.set_value(0, 0);
 	}
 	std::cout << "The Button " << n << " was clicked, value: " << v << std::endl;
 }
