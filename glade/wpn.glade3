@@ -8,12 +8,6 @@
       <column type="gchararray"/>
     </columns>
     <data>
-      <row>
-        <col id="0" translatable="yes">Алиса</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Боб</col>
-      </row>
     </data>
   </object>
   <object class="GtkListStore" id="liststoreMessage">
@@ -22,15 +16,6 @@
       <column type="gchararray"/>
     </columns>
     <data>
-      <row>
-        <col id="0" translatable="yes">Сообщение 1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Сообщение 2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Сообщение 3</col>
-      </row>
     </data>
   </object>
   <object class="GtkWindow" id="topWindow">
@@ -223,8 +208,6 @@
                         <property name="title" translatable="yes">Клиент</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertextMessage">
-                            <property name="cell_background_gdk">#ffffffffffff</property>
-                            <property name="background_gdk">#ffffffffffff</property>
                           </object>
                           <attributes>
                             <attribute name="text">0</attribute>
@@ -260,8 +243,6 @@
                         <property name="title" translatable="yes">Сообщение</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertextName">
-                            <property name="cell_background_gdk">#ffffffffffff</property>
-                            <property name="background_gdk">#ffffffffffff</property>
                           </object>
                           <attributes>
                             <attribute name="text">0</attribute>
