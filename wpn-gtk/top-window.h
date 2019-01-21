@@ -3,7 +3,7 @@
 
 #include <gtkmm.h>
 
-class TopWindow: public Gtk::Window {
+class TopWindow: public Gtk::ApplicationWindow {
 public:
 	TopWindow();
 	TopWindow(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);
@@ -11,6 +11,7 @@ public:
 protected:
 	void onButtonClickSend(int);
 	bool on_key_press_event(GdkEventKey *event) override;
+	void onHelpAbout();
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	Gtk::Entry *mEntryMessage;
 	Gtk::Button *mButtonSend;

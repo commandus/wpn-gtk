@@ -7,10 +7,10 @@ TopWindow::TopWindow()
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
-: Gtk::Window (cobject),
-  mRefBuilder (refBuilder)
+	: Gtk::ApplicationWindow(cobject), mRefBuilder (refBuilder)
 {
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
+
 	if (mEntryMessage) {
 	}
 	mRefBuilder->get_widget("buttonSend", mButtonSend);
@@ -66,4 +66,9 @@ bool TopWindow::on_key_press_event(GdkEventKey* event)
 			return Gtk::Window::on_key_press_event(event);
 	}
 	return FALSE; 
+}
+
+void TopWindow::onHelpAbout()
+{
+	std::cout << "Help About item was selected." << std::endl;
 }

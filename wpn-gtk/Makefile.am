@@ -14,7 +14,7 @@ commonlibs = -L. -L/usr/local/opt/openssl@1.1/lib
 AM_CXXFLAGS = -std=c++11
 
 nobase_dist_include_HEADERS = \
-	top-window.h
+	top-window.h wpn-app.h
 
 common_src =
 
@@ -22,7 +22,7 @@ common_src =
 #	wpn
 #
 wpn_gtk_SOURCES= \
-	wpn-gtk.cpp \
+	wpn-gtk.cpp wpn-app.cpp \
 	top-window.cpp \
 	$(common_src)
 
