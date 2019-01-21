@@ -7,16 +7,12 @@
       <!-- column-name name -->
       <column type="gchararray"/>
     </columns>
-    <data>
-    </data>
   </object>
   <object class="GtkListStore" id="liststoreMessage">
     <columns>
       <!-- column-name message -->
       <column type="gchararray"/>
     </columns>
-    <data>
-    </data>
   </object>
   <object class="GtkWindow" id="topWindow">
     <property name="can_focus">False</property>
@@ -200,15 +196,14 @@
                     <property name="can_focus">True</property>
                     <property name="model">liststoreClient</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selectionClient"/>
+                      <object class="GtkTreeSelection" id="treeviewSelectionClient"/>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumnClient">
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Клиент</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertextMessage">
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertextMessage"/>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>
@@ -234,7 +229,7 @@
                     <property name="can_focus">True</property>
                     <property name="model">liststoreMessage</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selectionMessage"/>
+                      <object class="GtkTreeSelection" id="treeviewSelectionMessage"/>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumnMessage">
@@ -242,8 +237,7 @@
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Сообщение</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertextName">
-                          </object>
+                          <object class="GtkCellRendererText" id="cellrenderertextName"/>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>

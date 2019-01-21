@@ -10,11 +10,14 @@ public:
 	virtual ~TopWindow();
 protected:
 	void onButtonClickSend(int);
+	bool on_key_press_event(GdkEventKey *event) override;
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	Gtk::Entry *mEntryMessage;
 	Gtk::Button *mButtonSend;
 	Gtk::TreeView *mTreeViewClient;
 	Gtk::TreeView *mTreeViewMessage;
+	Glib::RefPtr<Gtk::TreeSelection> mTreeViewSelectionClient;
+	Glib::RefPtr<Gtk::TreeSelection> mTreeViewSelectionMessage;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreClient;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreMessage;
 };
