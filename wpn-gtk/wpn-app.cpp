@@ -3,9 +3,9 @@
 #include <iostream>
 
 WpnApplication::WpnApplication()
-: Gtk::Application("org.gtkmm.example.main_menu")
+	: Gtk::Application("com.commandus.wpn")
 {
-	Glib::set_application_name("Main Menu Example");
+	Glib::set_application_name("wpn");
 }
 
 Glib::RefPtr<WpnApplication> WpnApplication::create()
@@ -15,13 +15,13 @@ Glib::RefPtr<WpnApplication> WpnApplication::create()
 
 void WpnApplication::on_startup()
 {
-	//Call the base class's implementation:
+	// Call the base class's implementation:
 	Gtk::Application::on_startup();
 
-	//Create actions for menus and toolbars.
+	// Create actions for menus and toolbars.
 	//We can use add_action() because Gtk::Application derives from Gio::ActionMap.
 
-	//File|New sub menu:
+	// File|New sub menu:
 	add_action("newstandard",
 	sigc::mem_fun(*this, &WpnApplication::on_menu_file_new_generic));
 
@@ -48,16 +48,21 @@ void WpnApplication::on_startup()
 		std::cerr << "Building menus failed: " << ex.what();
 	}
 
-	// Get the menubar and the app menu, and add them to the application:
+	auto object = m_refBuilder->get_object("menubar");
+	Glib::RefPtr<Gio::MenuModel> pMenuBar = Glib::RefPtr<Gio::MenuModel>::cast_dynamic(object);
+	/*
+	 * auto gmenu;
 	auto object = m_refBuilder->get_object("menubar");
 	auto gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(object);
-	if (!gmenu) {
-		g_warning("menu not found");
-	}
-	else
-	{
-		set_menubar(gmenu);
-	}
+	*/
+	set_menubar(pMenuBar);
+/*
+	// Get the menubar and the app menu, and add them to the application:
+	Glib::RefPtr<Glib::Object> o = m_refBuilder->get_object("menubar");
+	Glib::RefPtr<Gio::Menu> gmenu = Glib::RefPtr<Gio::Menu>::cast_dynamic(o);
+	//Gtk::MenuBar* pMenuBar = Gtk::make_managed<Gtk::MenuBar>(gmenu);
+	set_menubar(gmenu);
+	*/
 }
 
 void WpnApplication::on_activate()
