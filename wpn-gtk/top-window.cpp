@@ -11,6 +11,31 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 {
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
 
+	mRefActionGroup = Gio::SimpleActionGroup::create();
+	mRefActionGroup->add_action("quit",
+		sigc::mem_fun(*this, &TopWindow::onFileQuit));
+	mRefActionGroup->add_action("about",
+		sigc::mem_fun(*this, &TopWindow::onHelpAbout));
+	insert_action_group("wpn", mRefActionGroup);
+ 
+	mAboutDialog.set_transient_for(*this);
+	// mAboutDialog.set_logo(Gdk::Pixbuf::create_from_resource("/about/gtkmm_logo.gif", -1, 40, true));
+	mAboutDialog.set_program_name("WPN for Linux");
+	mAboutDialog.set_version("1.0.0");
+	mAboutDialog.set_copyright("Andrei Ivanov");
+	mAboutDialog.set_comments("Demo application.");
+	mAboutDialog.set_license("MIT");
+
+	mAboutDialog.set_website("https://www.commandus.com/");
+	mAboutDialog.set_website_label("commandus.com");
+
+	std::vector<Glib::ustring> list_authors;
+	list_authors.push_back("Andrei Ivanov  mailto:andrei.i.ivanov@commandus.com");
+	mAboutDialog.set_authors(list_authors);
+
+	mAboutDialog.signal_response().connect(
+		sigc::mem_fun(*this, &TopWindow::onAboutDialogResponse));
+
 	if (mEntryMessage) {
 	}
 	mRefBuilder->get_widget("buttonSend", mButtonSend);
@@ -70,5 +95,27 @@ bool TopWindow::on_key_press_event(GdkEventKey* event)
 
 void TopWindow::onHelpAbout()
 {
-	std::cout << "Help About item was selected." << std::endl;
+	std::cout << G_STRFUNC << std::endl;
+	mAboutDialog.show();
+	mAboutDialog.present();
 }
+
+void TopWindow::onFileQuit()
+{
+	std::cout << G_STRFUNC << std::endl;
+	hide();
+}
+
+void TopWindow::onAboutDialogResponse(int responseId)
+{
+	switch (responseId) {
+		case Gtk::RESPONSE_CLOSE:
+		case Gtk::RESPONSE_CANCEL:
+		case Gtk::RESPONSE_DELETE_EVENT:
+			mAboutDialog.hide();
+			break;
+		default:
+			break;
+	}
+}
+

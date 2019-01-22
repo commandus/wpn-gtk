@@ -12,6 +12,7 @@ protected:
 	void onButtonClickSend(int);
 	bool on_key_press_event(GdkEventKey *event) override;
 	void onHelpAbout();
+	void onFileQuit();
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	Gtk::Entry *mEntryMessage;
 	Gtk::Button *mButtonSend;
@@ -21,6 +22,10 @@ protected:
 	Glib::RefPtr<Gtk::TreeSelection> mTreeViewSelectionMessage;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreClient;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreMessage;
+	Gtk::AboutDialog mAboutDialog;
+	void onAboutDialogResponse(int responseId);
+private:
+	Glib::RefPtr<Gio::SimpleActionGroup> mRefActionGroup;
 };
 
 #endif

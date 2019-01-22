@@ -29,62 +29,67 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkMenuItem" id="menuitem1">
+              <object class="GtkMenuItem" id="menuitemFile">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
-                  <object class="GtkMenu" id="menu1">
+                  <object class="GtkMenu" id="menuFile">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem1">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFileNew">
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.new</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem2">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFileOpen">
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.open</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem3">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFileSave">
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.save</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem4">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFileSaveAs">
                         <property name="label">gtk-save-as</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.saveas</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitemFile">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="quit">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFile.quit">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -94,47 +99,51 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem2">
+              <object class="GtkMenuItem" id="menuitemEdit">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
-                  <object class="GtkMenu" id="menu2">
+                  <object class="GtkMenu" id="menuEdit">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem6">
+                      <object class="GtkImageMenuItem" id="imagemenuitemEditCut">
                         <property name="label">gtk-cut</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.cut</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem7">
+                      <object class="GtkImageMenuItem" id="imagemenuitemEditCopy">
                         <property name="label">gtk-copy</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.copy</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem8">
+                      <object class="GtkImageMenuItem" id="imagemenuitemEditPaste">
                         <property name="label">gtk-paste</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.paste</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem9">
+                      <object class="GtkImageMenuItem" id="imagemenuitemEditDelete">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.delete</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -144,7 +153,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem3">
+              <object class="GtkMenuItem" id="menuitemView">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_View</property>
@@ -152,20 +161,21 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem4">
+              <object class="GtkMenuItem" id="menuitemHelp">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
-                  <object class="GtkMenu" id="menu3">
+                  <object class="GtkMenu" id="menuHelp">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="about">
+                      <object class="GtkImageMenuItem" id="imagemenuitemHelpAbout">
                         <property name="label">gtk-about</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="action_name">wpn.about</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>

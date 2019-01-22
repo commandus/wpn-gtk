@@ -12,10 +12,7 @@ protected:
 	void on_startup() override;
 	void on_activate() override;
 private:
-	Glib::RefPtr<Gtk::Builder> m_refBuilder;
+	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	void create_window();
 	void on_window_hide(Gtk::Window* window);
-	void on_menu_file_new_generic();
-	void on_menu_file_quit();
-	void on_menu_help_about();
 };
