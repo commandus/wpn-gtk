@@ -26,7 +26,6 @@ void WpnApplication::on_startup()
 	{
 		std::cerr << "Building menus failed: " << ex.what();
 	}
-
 }
 
 void WpnApplication::on_activate()

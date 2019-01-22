@@ -1,4 +1,5 @@
 #include <gtkmm.h>
+#include "client-env.h"
 
 #define UI_FILE "../glade/wpn.glade3"
 
@@ -6,6 +7,7 @@ class WpnApplication : public Gtk::Application
 {
 protected:
 	WpnApplication();
+	Glib::RefPtr<ClientEnv> mReClientEnv;
 public:
 	static Glib::RefPtr<WpnApplication> create();
 protected:

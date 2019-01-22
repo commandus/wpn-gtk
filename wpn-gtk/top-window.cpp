@@ -16,6 +16,15 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 		sigc::mem_fun(*this, &TopWindow::onFileQuit));
 	mRefActionGroup->add_action("about",
 		sigc::mem_fun(*this, &TopWindow::onHelpAbout));
+	mRefActionGroup->add_action("open",
+		sigc::mem_fun(*this, &TopWindow::onFileOpen));
+	mRefActionGroup->add_action("hew",
+		sigc::mem_fun(*this, &TopWindow::onFileNew));
+	mRefActionGroup->add_action("save",
+		sigc::mem_fun(*this, &TopWindow::onFileSave));
+	mRefActionGroup->add_action("saveas",
+		sigc::mem_fun(*this, &TopWindow::onFileSaveAs));
+	
 	insert_action_group("wpn", mRefActionGroup);
  
 	mAboutDialog.set_transient_for(*this);
@@ -51,8 +60,12 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
 	mTreeViewSelectionMessage = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionMessage"));
-	
+
 	add_events(Gdk::KEY_PRESS_MASK);
+
+	mFileFilterWPN = Gtk::FileFilter::create();
+	mFileFilterWPN->set_name("wpn client files");
+	mFileFilterWPN->add_mime_type("application/json");
 }
 
 void TopWindow::onButtonClickSend(int n) {
@@ -104,6 +117,56 @@ void TopWindow::onFileQuit()
 {
 	std::cout << G_STRFUNC << std::endl;
 	hide();
+}
+
+void TopWindow::onFileOpen()
+{
+	std::cout << G_STRFUNC << std::endl;
+	Gtk::FileChooserDialog dialog("Open file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+	dialog.set_transient_for(*this);
+	// Add response buttons the the dialog:
+	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_filter(mFileFilterWPN);
+	int result = dialog.run();
+	// Handle the response:
+	switch(result) {
+		case(Gtk::RESPONSE_OK):
+			std::cout << "File selected: " << dialog.get_filename() << std::endl;
+			break;
+		default:
+			break;
+	}	
+}
+
+void TopWindow::onFileNew()
+{
+	std::cout << G_STRFUNC << std::endl;
+}
+
+void TopWindow::onFileSave()
+{
+	std::cout << G_STRFUNC << std::endl;
+}
+
+void TopWindow::onFileSaveAs()
+{
+	std::cout << G_STRFUNC << std::endl;
+	Gtk::FileChooserDialog dialog("Save file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+	dialog.set_transient_for(*this);
+	// Add response buttons the the dialog:
+	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Save", Gtk::RESPONSE_OK);
+	dialog.add_filter(mFileFilterWPN);
+	int result = dialog.run();
+	// Handle the response:
+	switch(result) {
+		case(Gtk::RESPONSE_OK):
+			std::cout << "File selected: " << dialog.get_filename() << std::endl;
+			break;
+		default:
+			break;
+	}	
 }
 
 void TopWindow::onAboutDialogResponse(int responseId)

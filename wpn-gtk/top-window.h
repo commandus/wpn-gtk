@@ -13,6 +13,10 @@ protected:
 	bool on_key_press_event(GdkEventKey *event) override;
 	void onHelpAbout();
 	void onFileQuit();
+	void onFileOpen();
+	void onFileNew();
+	void onFileSave();
+	void onFileSaveAs();
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	Gtk::Entry *mEntryMessage;
 	Gtk::Button *mButtonSend;
@@ -25,6 +29,7 @@ protected:
 	Gtk::AboutDialog mAboutDialog;
 	void onAboutDialogResponse(int responseId);
 private:
+	Glib::RefPtr<Gtk::FileFilter> mFileFilterWPN;
 	Glib::RefPtr<Gio::SimpleActionGroup> mRefActionGroup;
 };
 
