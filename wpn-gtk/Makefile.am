@@ -9,7 +9,7 @@ bin_PROGRAMS = \
 commoncppflags = -O2 -I/usr/local/include
 commoncppflags += -I/usr/local/opt/openssl@1.1/include -I ../../wpn
 
-commonlibs = -L. -L/usr/local/opt/openssl@1.1/lib -L../../wpn -L/usr/local/lib/ -lssl -lcrypto -lcurl -lprotobuf -lece
+commonlibs = -L. -L/usr/local/opt/openssl@1.1/lib -Llibs -L/usr/local/lib/ -lssl -lcrypto -lcurl -lprotobuf -lece
 
 AM_CXXFLAGS = -std=c++11
 
@@ -19,7 +19,7 @@ nobase_dist_include_HEADERS = \
 common_src =
 
 #
-#	wpn
+#	wpn-gtk
 #
 wpn_gtk_SOURCES= \
 	wpn-gtk.cpp wpn-app.cpp \
