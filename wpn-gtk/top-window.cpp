@@ -93,6 +93,11 @@ void TopWindow::onButtonClickSend(int n) {
 TopWindow::~TopWindow() {
 }
 
+void TopWindow::setClientEnv(Glib::RefPtr<ClientEnv> value)
+{
+	mRefClientEnv = value;
+}
+
 bool TopWindow::on_key_press_event(GdkEventKey* event)
 {
 	switch (event->keyval)
@@ -142,11 +147,13 @@ void TopWindow::onFileOpen()
 void TopWindow::onFileNew()
 {
 	std::cout << G_STRFUNC << std::endl;
+	mRefClientEnv->newClientFile();
 }
 
 void TopWindow::onFileSave()
 {
 	std::cout << G_STRFUNC << std::endl;
+	mRefClientEnv->saveClientFile();
 }
 
 void TopWindow::onFileSaveAs()
@@ -163,6 +170,7 @@ void TopWindow::onFileSaveAs()
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
 			std::cout << "File selected: " << dialog.get_filename() << std::endl;
+			mRefClientEnv->saveAsClientFile(dialog.get_filename());
 			break;
 		default:
 			break;

@@ -2,12 +2,14 @@
 #define	TOPWINDOW_H
 
 #include <gtkmm.h>
+#include "client-env.h"
 
 class TopWindow: public Gtk::ApplicationWindow {
 public:
 	TopWindow();
 	TopWindow(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);
 	virtual ~TopWindow();
+	void setClientEnv(Glib::RefPtr<ClientEnv> value);
 protected:
 	void onButtonClickSend(int);
 	bool on_key_press_event(GdkEventKey *event) override;
@@ -27,6 +29,7 @@ protected:
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreClient;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreMessage;
 	Gtk::AboutDialog mAboutDialog;
+	Glib::RefPtr<ClientEnv> mRefClientEnv;
 	void onAboutDialogResponse(int responseId);
 private:
 	Glib::RefPtr<Gtk::FileFilter> mFileFilterWPN;

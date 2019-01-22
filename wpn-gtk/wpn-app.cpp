@@ -30,24 +30,26 @@ void WpnApplication::on_startup()
 
 void WpnApplication::on_activate()
 {
-	create_window();
+	createWindow();
 }
 
-void WpnApplication::create_window()
+void WpnApplication::createWindow()
 {
 	// Load the Glade file and instiate its widgets:
-	TopWindow* appwindow = 0;
-	mRefBuilder->get_widget_derived("topWindow", appwindow);
+	TopWindow* topWindow = 0;
+	mRefBuilder->get_widget_derived("topWindow", topWindow);
+	topWindow->setClientEnv(mRefClientEnv);
+
 	// Make sure that the application runs for as long this window is still open:
-	add_window(*appwindow);
+	add_window(*topWindow);
 	// Delete the window when it is hidden.
 	// That's enough for this simple example.
-	appwindow->signal_hide().connect(sigc::bind<Gtk::Window*>(
-	sigc::mem_fun(*this, &WpnApplication::on_window_hide), appwindow));
-	appwindow->show_all();
+	topWindow->signal_hide().connect(sigc::bind<Gtk::Window*>(
+	sigc::mem_fun(*this, &WpnApplication::onWindowHide), topWindow));
+	topWindow->show_all();
 }
 
-void WpnApplication::on_window_hide(Gtk::Window* window)
+void WpnApplication::onWindowHide(Gtk::Window* window)
 {
 	delete window;
 }

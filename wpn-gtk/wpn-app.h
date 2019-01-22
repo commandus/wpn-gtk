@@ -7,7 +7,7 @@ class WpnApplication : public Gtk::Application
 {
 protected:
 	WpnApplication();
-	Glib::RefPtr<ClientEnv> mReClientEnv;
+	Glib::RefPtr<ClientEnv> mRefClientEnv;
 public:
 	static Glib::RefPtr<WpnApplication> create();
 protected:
@@ -15,6 +15,6 @@ protected:
 	void on_activate() override;
 private:
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
-	void create_window();
-	void on_window_hide(Gtk::Window* window);
+	void createWindow();
+	void onWindowHide(Gtk::Window* window);
 };
