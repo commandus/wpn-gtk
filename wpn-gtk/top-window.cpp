@@ -1,9 +1,42 @@
 #include <iostream>
 #include "top-window.h"
 #include <gdk/gdkkeysyms.h>
+#include <sstream>
+#include "google/protobuf/stubs/common.h"
+
+#define MIT_LICENSE "Copyright (c) 2019 Andrei Ivanov \n\n\
+MIT license\n\n\
+Permission is hereby granted, free of charge, to any \n\
+person obtaining a copy of this software and associated \n\
+documentation files (the \"Software\"), to deal in the \n\
+Software without restriction, including without limitation \n\
+the rights to use, copy, modify, merge, publish, distribute, \n\
+sublicense, and/or sell copies of the Software, and to permit \n\
+persons to whom the Software is furnished to do so, subject \n\
+to the following conditions:\n\n\
+The above copyright notice and this permission notice shall \n\
+be included in all copies or substantial portions of the \n\
+Software.\n\n\
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY \n\
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE \n\
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR\" \n\
+PURPOSE AND NONINFRINGEMENT IN NO EVENT SHALL THE AUTHORS \n\
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR \n\
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT\" \n\
+OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION \n\
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN \n\
+THE SOFTWARE."
 
 TopWindow::TopWindow()
 {
+}
+
+static std::string protobufVersion()
+{
+	std::stringstream r;
+	r << "libprotobuf: " << google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION);
+	return r.str();
+
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
@@ -30,10 +63,10 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mAboutDialog.set_transient_for(*this);
 	// mAboutDialog.set_logo(Gdk::Pixbuf::create_from_resource("/about/gtkmm_logo.gif", -1, 40, true));
 	mAboutDialog.set_program_name("WPN for Linux");
-	mAboutDialog.set_version("1.0.0");
+	mAboutDialog.set_version("1.0.0 " + protobufVersion());
 	mAboutDialog.set_copyright("Andrei Ivanov");
-	mAboutDialog.set_comments("Demo application.");
-	mAboutDialog.set_license("MIT");
+	mAboutDialog.set_comments("Linux wpn client");
+	mAboutDialog.set_license(MIT_LICENSE);
 
 	mAboutDialog.set_website("https://www.commandus.com/");
 	mAboutDialog.set_website_label("commandus.com");
@@ -65,7 +98,7 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 
 	mFileFilterWPN = Gtk::FileFilter::create();
 	mFileFilterWPN->set_name("wpn client files");
-	mFileFilterWPN->add_mime_type("application/json");
+	mFileFilterWPN->add_mime_type("application/javascript");
 }
 
 void TopWindow::onButtonClickSend(int n) {
@@ -113,7 +146,6 @@ bool TopWindow::on_key_press_event(GdkEventKey* event)
 
 void TopWindow::onHelpAbout()
 {
-	std::cout << G_STRFUNC << std::endl;
 	mAboutDialog.show();
 	mAboutDialog.present();
 }
@@ -127,17 +159,17 @@ void TopWindow::onFileQuit()
 void TopWindow::onFileOpen()
 {
 	std::cout << G_STRFUNC << std::endl;
-	Gtk::FileChooserDialog dialog("Open file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+	Gtk::FileChooserDialog dialog("Open client file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog.set_transient_for(*this);
 	// Add response buttons the the dialog:
 	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	dialog.add_button("Select", Gtk::RESPONSE_OK);
+	dialog.add_button("Open", Gtk::RESPONSE_OK);
 	dialog.add_filter(mFileFilterWPN);
 	int result = dialog.run();
 	// Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
-			std::cout << "File selected: " << dialog.get_filename() << std::endl;
+			mRefClientEnv->openClientFile(dialog.get_filename());
 			break;
 		default:
 			break;
@@ -169,7 +201,6 @@ void TopWindow::onFileSaveAs()
 	// Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
-			std::cout << "File selected: " << dialog.get_filename() << std::endl;
 			mRefClientEnv->saveAsClientFile(dialog.get_filename());
 			break;
 		default:
