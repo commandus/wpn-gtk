@@ -29,7 +29,7 @@ Aborted (core dumped)
 
 Reason:
 
-GTK+ 3.0 compiled with Protobuf 2.6.1, libwpn.a compled withj 3.1.0
+GTK+ 3.0 compiled with Protobuf 2.6.1, libwpn.a compiled with 3.1.0
 
 Solution:
 
