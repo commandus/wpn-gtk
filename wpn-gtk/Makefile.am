@@ -9,7 +9,7 @@ bin_PROGRAMS = \
 commoncppflags = -O2
 commoncppflags += -I/usr/local/include -I/usr/local/opt/openssl@1.1/include -I ../../wpn
 
-commonlibs = -L. -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto -lcurl -lprotobuf -lece
+commonlibs = -L. -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto -lcurl -lece
 
 AM_CXXFLAGS = -std=c++11
 
@@ -28,7 +28,7 @@ wpn_gtk_SOURCES= \
 
 wpn_gtk_LDADD = -lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lglibmm-2.4 -lgtk-3 -lgdk-3 \
 	-lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lgio-2.0 -lcairomm-1.0 -lcairo -lsigc-2.0 -lgdk_pixbuf-2.0 -lgobject-2.0 -lglib-2.0 \
-	-L../../wpn -lwpn \
+	-L../../wpn \
 	$(commonlibs)
 
 wpn_gtk_CPPFLAGS = $(commoncppflags) `pkg-config gtkmm-3.0 --cflags`

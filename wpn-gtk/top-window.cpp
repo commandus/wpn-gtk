@@ -34,13 +34,13 @@ TopWindow::TopWindow()
 static std::string protobufVersion()
 {
 	std::stringstream r;
-	r << "libprotobuf: " << google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION);
+//	r << "libprotobuf: " << google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION);
 	return r.str();
 
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
-	: Gtk::ApplicationWindow(cobject), mRefBuilder (refBuilder)
+	: Gtk::ApplicationWindow(cobject), mRefBuilder (refBuilder), mClientEnv(NULL)
 {
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
 
@@ -126,9 +126,9 @@ void TopWindow::onButtonClickSend(int n) {
 TopWindow::~TopWindow() {
 }
 
-void TopWindow::setClientEnv(Glib::RefPtr<ClientEnv> value)
+void TopWindow::setClientEnv(ClientEnv* value)
 {
-	mRefClientEnv = value;
+	mClientEnv = value;
 }
 
 bool TopWindow::on_key_press_event(GdkEventKey* event)
@@ -169,7 +169,8 @@ void TopWindow::onFileOpen()
 	// Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
-			mRefClientEnv->openClientFile(dialog.get_filename());
+			if (mClientEnv)
+				mClientEnv->openClientFile(dialog.get_filename());
 			break;
 		default:
 			break;
@@ -179,13 +180,15 @@ void TopWindow::onFileOpen()
 void TopWindow::onFileNew()
 {
 	std::cout << G_STRFUNC << std::endl;
-	mRefClientEnv->newClientFile();
+	if (mClientEnv)
+		mClientEnv->newClientFile();
 }
 
 void TopWindow::onFileSave()
 {
 	std::cout << G_STRFUNC << std::endl;
-	mRefClientEnv->saveClientFile();
+	if (mClientEnv)
+		mClientEnv->saveClientFile();
 }
 
 void TopWindow::onFileSaveAs()
@@ -201,7 +204,8 @@ void TopWindow::onFileSaveAs()
 	// Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
-			mRefClientEnv->saveAsClientFile(dialog.get_filename());
+			if (mClientEnv)
+				mClientEnv->saveAsClientFile(dialog.get_filename());
 			break;
 		default:
 			break;

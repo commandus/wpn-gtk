@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-/* #undef HAVE_DLFCN_H */
+#define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
@@ -11,7 +11,7 @@
 #define HAVE_FORK 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-/* #undef HAVE_INTTYPES_H */
+#define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `crypto' library (-lcrypto). */
 #define HAVE_LIBCRYPTO 1
@@ -23,7 +23,7 @@
 #define HAVE_MEMMOVE 1
 
 /* Define to 1 if you have the <memory.h> header file. */
-/* #undef HAVE_MEMORY_H */
+#define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `memset' function. */
 #define HAVE_MEMSET 1
@@ -32,22 +32,22 @@
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-/* #undef HAVE_STDLIB_H */
+#define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-/* #undef HAVE_STRINGS_H */
+#define HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-/* #undef HAVE_SYS_STAT_H */
+#define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
 #define HAVE_SYS_TIME_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-/* #undef HAVE_SYS_TYPES_H */
+#define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <termios.h> header file. */
 #define HAVE_TERMIOS_H 1
@@ -68,28 +68,28 @@
 #define HAVE_WORKING_VFORK 1
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
-/* #undef LT_OBJDIR */
+#define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
-/* #undef PACKAGE_BUGREPORT */
+#define PACKAGE_BUGREPORT "andrei.i.ivanov@commandus.com"
 
 /* Define to the full name of this package. */
-/* #undef PACKAGE_NAME */
+#define PACKAGE_NAME "wpn-gtk"
 
 /* Define to the full name and version of this package. */
-/* #undef PACKAGE_STRING */
+#define PACKAGE_STRING "wpn-gtk 0.1"
 
 /* Define to the one symbol short name of this package. */
-/* #undef PACKAGE_TARNAME */
+#define PACKAGE_TARNAME "wpn-gtk"
 
 /* Define to the home page for this package. */
-/* #undef PACKAGE_URL */
+#define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-/* #undef PACKAGE_VERSION */
+#define PACKAGE_VERSION "0.1"
 
 /* Define to 1 if you have the ANSI C header files. */
-/* #undef STDC_HEADERS */
+#define STDC_HEADERS 1
 
 /* Define for Solaris 2.5.1 so the uint64_t typedef from <sys/synch.h>,
    <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the

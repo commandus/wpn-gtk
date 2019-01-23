@@ -3,6 +3,99 @@
 #include "utilinstance.h"
 #include "endpoint.h"
 
+#ifndef WPNLIB
+void *startClient
+(
+	int *retcode,
+	const std::string &lastPersistentId,
+	const std::string &privateKey,
+	const std::string &authSecret,
+	uint64_t androidId,
+	uint64_t securityToken,
+	OnNotifyC onNotify,
+	void *onNotifyEnv,
+	OnLogC onLog,
+	void *onLogEnv,
+	int verbosity
+)
+{
+	return NULL;
+}
+
+/**
+ * Stop client
+ */
+void stopClient
+(
+	void *client
+)
+{
+}
+
+/**
+ * Load config file
+ * @return 0- success, -1: Invalid JSON, -2: Invalid config
+ */
+int readConfig
+(
+	const std::string &filename,
+	enum VAPID_PROVIDER &provider,
+	std::string &registrationId,
+	std::string &privateKey,
+	std::string &publicKey,
+	std::string &authSecret,
+	uint64_t &androidId,
+	uint64_t &securityToken,
+	std::string &appId,
+	std::string &lastPersistentId
+)
+{
+	return 0;
+}
+
+int writeConfig
+(
+	const std::string &filename,
+	enum VAPID_PROVIDER provider,
+ 	const char* registrationIdC,
+	const char* privateKeyC,
+	const char* publicKeyC,
+	const char* authSecretC,
+	uint64_t androidId,
+	uint64_t securityToken,
+	const std::string &appId,
+	const std::string &lastPersistentId
+)
+{
+	return 0;
+}
+
+/**
+ * Calls generateVAPIDKeys() and checkIn()
+ * @return from checkIn()
+ */
+int initClient
+(
+	std::string &retRegistrationId,
+	std::string &privateKey,
+	std::string &publicKey,
+	std::string &authSecret,
+	uint64_t *androidId,
+	uint64_t *securityToken,
+	std::string &appId,
+	int verbosity
+)
+{
+	return 0;
+}
+
+std::string mkInstanceId()
+{
+	return "";
+}
+
+#endif
+
 ClientEnv::ClientEnv
 (
 )
@@ -12,7 +105,14 @@ ClientEnv::ClientEnv
 	client(NULL),
 	provider(PROVIDER_CHROME), clientFileName(""), hasClientFileName(false), isClientFileModified(false)
 {
-	
+}
+
+ClientEnv::~ClientEnv
+(
+)
+{
+	std::cout << "Done" << std::endl;
+//	stop();
 }
 
 bool ClientEnv::newClientFile()
@@ -174,7 +274,7 @@ bool ClientEnv::start()
 bool ClientEnv::stop()
 {
 	if (!client)
-		return false;
+		return true;
 	stopClient(client);
 	client = NULL;
 }

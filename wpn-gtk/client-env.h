@@ -23,6 +23,7 @@ protected:
 	MCSClient *client;
 public:
 	ClientEnv();
+	~ClientEnv();
 	enum VAPID_PROVIDER provider;
 	std::string clientFileName;
 	bool hasClientFileName;
