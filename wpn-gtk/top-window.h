@@ -4,7 +4,7 @@
 #include <gtkmm.h>
 #include "client-env.h"
 
-class TopWindow: public Gtk::ApplicationWindow {
+class TopWindow: public Gtk::Window {
 public:
 	TopWindow();
 	TopWindow(BaseObjectType*, const Glib::RefPtr<Gtk::Builder>&);

@@ -3,6 +3,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <sstream>
 #include "google/protobuf/stubs/common.h"
+#define DLG_CAPTION_OPENFILE_ERROR "Error read wpn client file"
 
 #define MIT_LICENSE "Copyright (c) 2019 Andrei Ivanov \n\n\
 MIT license\n\n\
@@ -39,10 +40,13 @@ static std::string protobufVersion()
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
-	: Gtk::ApplicationWindow(cobject), mRefBuilder (refBuilder), mClientEnv(NULL)
+	: Gtk::Window(cobject), mRefBuilder (refBuilder), mClientEnv(NULL)
 {
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
 
+	// GtkAccelGroup *accelGroup = gtk_accel_group_new();
+	// gtk_window_add_accel_group(GTK_WINDOW(this), accelGroup);
+	
 	mRefActionGroup = Gio::SimpleActionGroup::create();
 	mRefActionGroup->add_action("quit",
 		sigc::mem_fun(*this, &TopWindow::onFileQuit));
@@ -151,13 +155,11 @@ void TopWindow::onHelpAbout()
 
 void TopWindow::onFileQuit()
 {
-	std::cout << G_STRFUNC << std::endl;
 	hide();
 }
 
 void TopWindow::onFileOpen()
 {
-	std::cout << G_STRFUNC << std::endl;
 	Gtk::FileChooserDialog dialog("Open client file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 	dialog.set_transient_for(*this);
 	// Add response buttons the the dialog:
@@ -168,8 +170,14 @@ void TopWindow::onFileOpen()
 	// Handle the response:
 	switch(result) {
 		case(Gtk::RESPONSE_OK):
-			if (mClientEnv)
-				mClientEnv->openClientFile(dialog.get_filename());
+			if (mClientEnv) {
+				std::string fn = dialog.get_filename();
+				if (!mClientEnv->openClientFile(fn)) {
+					Gtk::MessageDialog dialog(*this, DLG_CAPTION_OPENFILE_ERROR);
+					dialog.set_secondary_text(fn);
+					dialog.run();
+				}
+			}
 			break;
 		default:
 			break;

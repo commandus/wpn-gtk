@@ -3,6 +3,7 @@
 #include "utilinstance.h"
 #include "endpoint.h"
 
+#define WPNLIB 1
 #ifndef WPNLIB
 void *startClient
 (
@@ -111,8 +112,7 @@ ClientEnv::~ClientEnv
 (
 )
 {
-	std::cout << "Done" << std::endl;
-//	stop();
+	stop();
 }
 
 bool ClientEnv::newClientFile()
@@ -129,10 +129,12 @@ bool ClientEnv::newClientFile()
 
 bool ClientEnv::openClientFile(const std::string &fileName)
 {
+	clientFileName = fileName;
 	bool r = read();
 	if (!r) {
 		hasClientFileName = false;
 		isClientFileModified = true;
+		clientFileName = "";
 		return false;
 	}
 	start();
@@ -162,8 +164,6 @@ bool ClientEnv::saveAsClientFile(const std::string &fileName)
 
 bool ClientEnv::read()
 {
-	if (!hasClientFileName)
-		return false;
 	// load config file
 	int r = readConfig(
 		clientFileName,
@@ -269,6 +269,7 @@ bool ClientEnv::start()
 		NULL,
 		verbosity
 	);
+	std::cerr << "Client started " << client << std::endl;
 }
 
 bool ClientEnv::stop()
