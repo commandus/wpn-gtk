@@ -6,7 +6,6 @@ WpnApplication::WpnApplication()
 	: Gtk::Application("com.commandus.wpn")
 {
 	Glib::set_application_name("wpn");
-	// mClientEnv = NULL;
 }
 
 Glib::RefPtr<WpnApplication> WpnApplication::create()
@@ -39,7 +38,7 @@ void WpnApplication::createWindow()
 	// Load the Glade file and instiate its widgets:
 	TopWindow* topWindow = 0;
 	mRefBuilder->get_widget_derived("topWindow", topWindow);
-	// topWindow->setClientEnv(mClientEnv);
+	topWindow->setClientEnv(&mClientEnv);
 
 	// Make sure that the application runs for as long this window is still open:
 	add_window(*topWindow);

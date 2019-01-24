@@ -34,9 +34,8 @@ TopWindow::TopWindow()
 static std::string protobufVersion()
 {
 	std::stringstream r;
-//	r << "libprotobuf: " << google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION);
+	r << "libprotobuf: " << google::protobuf::internal::VersionString(GOOGLE_PROTOBUF_VERSION);
 	return r.str();
-
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)

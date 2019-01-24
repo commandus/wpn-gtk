@@ -34,7 +34,7 @@ class WpnApplication : public Gtk::Application
 {
 protected:
 	WpnApplication();
-	// ClientEnv *mClientEnv;
+	ClientEnv mClientEnv;
 public:
 	static Glib::RefPtr<WpnApplication> create();
 protected:
