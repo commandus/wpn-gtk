@@ -8,6 +8,39 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkListStore" id="liststoreLog">
+    <columns>
+      <!-- column-name line -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="logWindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Log</property>
+    <property name="default_width">640</property>
+    <property name="default_height">480</property>
+    <child>
+      <object class="GtkTreeView" id="treeviewLog">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="model">liststoreLog</property>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection" id="treeviewSelectionLog"/>
+        </child>
+        <child>
+          <object class="GtkTreeViewColumn" id="treeviewcolumnLog">
+            <property name="title" translatable="yes">Line</property>
+            <child>
+              <object class="GtkCellRendererText" id="cellrenderertextLog"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="liststoreMessage">
     <columns>
       <!-- column-name message -->
@@ -167,6 +200,21 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_View</property>
                 <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menuView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="checkmenuitemLog">
+                        <property name="label">_Log</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="action_name">wpn.log</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -213,6 +261,7 @@
                   <object class="GtkTreeView" id="treeviewClient">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hscroll_policy">natural</property>
                     <property name="model">liststoreClient</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeviewSelectionClient"/>

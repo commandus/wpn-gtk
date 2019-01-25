@@ -101,6 +101,7 @@ ClientEnv::ClientEnv
 (
 )
 	: verbosity(0), lastError(0), lastHttpCode(0), 
+	onLog(NULL),
 	registrationId(""), lastPersistentId(""), privateKey(""), 
 	publicKey(""), authSecret(""), androidId(0), securityToken(0), appId(""), 
 	client(NULL),
@@ -242,14 +243,21 @@ void onNotify
 	}
 }
 
-void onLog
+void onLogc
 (
 	void *env,
 	int severity,
 	const char *message
 )
 {
-	std::cerr << message;
+	ClientEnv* c = (ClientEnv*) env;
+	if (c->onLog)
+		c->onLog(severity, message);
+}
+
+void ClientEnv::addLogHandler(std::function<void(int, const char *)> handler)
+{
+	onLog = handler;
 }
 
 bool ClientEnv::start()
@@ -264,9 +272,9 @@ bool ClientEnv::start()
 		androidId,
 		securityToken,
 		onNotify,
-		NULL,
-		onLog,
-		NULL,
+		this,
+		onLogc,
+		this,
 		verbosity
 	);
 	std::cerr << "Client started " << client << std::endl;

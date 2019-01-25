@@ -3,6 +3,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <sstream>
 #include "google/protobuf/stubs/common.h"
+#include "log-window.h"
+
 #define DLG_CAPTION_OPENFILE_ERROR "Error read wpn client file"
 
 #define MIT_LICENSE "Copyright (c) 2019 Andrei Ivanov \n\n\
@@ -29,6 +31,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN \n\
 THE SOFTWARE."
 
 TopWindow::TopWindow()
+	: mLogWindow(NULL)
 {
 }
 
@@ -40,9 +43,18 @@ static std::string protobufVersion()
 }
 
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
-	: Gtk::Window(cobject), mRefBuilder (refBuilder), mClientEnv(NULL)
+	: Gtk::Window(cobject), mRefBuilder (refBuilder), mClientEnv(NULL), mLogWindow(NULL)
 {
+	mLogWindow = 0;
+	mRefBuilder->get_widget_derived("logWindow", mLogWindow);
+	mLogWindow->setClientEnv(mClientEnv);
+	mLogWindow->signal_hide().connect(sigc::bind<Gtk::Window *>(
+		sigc::mem_fun(*this, &TopWindow::onWindowHideLog), mLogWindow));
+
 	mRefBuilder->get_widget("entryMessage", mEntryMessage);
+	if (mEntryMessage) {
+	}
+	mRefBuilder->get_widget("checkmenuitemLog", mCheckMenuViewLog);
 
 	// GtkAccelGroup *accelGroup = gtk_accel_group_new();
 	// gtk_window_add_accel_group(GTK_WINDOW(this), accelGroup);
@@ -60,29 +72,10 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 		sigc::mem_fun(*this, &TopWindow::onFileSave));
 	mRefActionGroup->add_action("saveas",
 		sigc::mem_fun(*this, &TopWindow::onFileSaveAs));
-	
+	mRefActionGroup->add_action("log",
+		sigc::mem_fun(*this, &TopWindow::onViewLog));
 	insert_action_group("wpn", mRefActionGroup);
  
-	mAboutDialog.set_transient_for(*this);
-	// mAboutDialog.set_logo(Gdk::Pixbuf::create_from_resource("/about/gtkmm_logo.gif", -1, 40, true));
-	mAboutDialog.set_program_name("WPN for Linux");
-	mAboutDialog.set_version("1.0.0 " + protobufVersion());
-	mAboutDialog.set_copyright("Andrei Ivanov");
-	mAboutDialog.set_comments("Linux wpn client");
-	mAboutDialog.set_license(MIT_LICENSE);
-
-	mAboutDialog.set_website("https://www.commandus.com/");
-	mAboutDialog.set_website_label("commandus.com");
-
-	std::vector<Glib::ustring> list_authors;
-	list_authors.push_back("Andrei Ivanov  mailto:andrei.i.ivanov@commandus.com");
-	mAboutDialog.set_authors(list_authors);
-
-	mAboutDialog.signal_response().connect(
-		sigc::mem_fun(*this, &TopWindow::onAboutDialogResponse));
-
-	if (mEntryMessage) {
-	}
 	mRefBuilder->get_widget("buttonSend", mButtonSend);
 	if (mButtonSend) {
 		mButtonSend->signal_clicked().connect(
@@ -132,6 +125,12 @@ TopWindow::~TopWindow() {
 void TopWindow::setClientEnv(ClientEnv* value)
 {
 	mClientEnv = value;
+	value->addLogHandler(TopWindow::onLog);
+}
+
+void TopWindow::onLog(int verbosity, const char *message)
+{
+	//
 }
 
 bool TopWindow::on_key_press_event(GdkEventKey* event)
@@ -149,8 +148,27 @@ bool TopWindow::on_key_press_event(GdkEventKey* event)
 
 void TopWindow::onHelpAbout()
 {
-	mAboutDialog.show();
-	mAboutDialog.present();
+	mAboutDialog = new Gtk::AboutDialog();
+	mAboutDialog->set_transient_for(*this);
+	// mAboutDialog.set_logo(Gdk::Pixbuf::create_from_resource("/about/gtkmm_logo.gif", -1, 40, true));
+	mAboutDialog->set_program_name("WPN for Linux");
+	mAboutDialog->set_version("1.0.0 " + protobufVersion());
+	mAboutDialog->set_copyright("Andrei Ivanov");
+	mAboutDialog->set_comments("Linux wpn client");
+	mAboutDialog->set_license(MIT_LICENSE);
+
+	mAboutDialog->set_website("https://www.commandus.com/");
+	mAboutDialog->set_website_label("commandus.com");
+
+	std::vector<Glib::ustring> list_authors;
+	list_authors.push_back("Andrei Ivanov  mailto:andrei.i.ivanov@commandus.com");
+	mAboutDialog->set_authors(list_authors);
+
+	mAboutDialog->signal_response().connect(
+		sigc::mem_fun(*this, &TopWindow::onAboutDialogResponse));
+
+	mAboutDialog->show();
+	mAboutDialog->present();
 }
 
 void TopWindow::onFileQuit()
@@ -225,10 +243,24 @@ void TopWindow::onAboutDialogResponse(int responseId)
 		case Gtk::RESPONSE_CLOSE:
 		case Gtk::RESPONSE_CANCEL:
 		case Gtk::RESPONSE_DELETE_EVENT:
-			mAboutDialog.hide();
+			mAboutDialog->hide();
 			break;
 		default:
 			break;
 	}
 }
 
+void TopWindow::onViewLog()
+{
+	if (mCheckMenuViewLog->get_active())
+		mLogWindow->show_all();
+	else
+		mLogWindow->hide();
+}
+
+void TopWindow::onWindowHideLog(Gtk::Window *window)
+{
+	if (mCheckMenuViewLog)
+		mCheckMenuViewLog->set_active(false);
+	window->hide();
+}

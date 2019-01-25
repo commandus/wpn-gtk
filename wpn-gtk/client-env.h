@@ -1,5 +1,6 @@
 #ifndef CLIENT_ENV_H_
 #define CLIENT_ENV_H_	1
+#include <functional>
 #include <string>
 #include <gtkmm.h>
 
@@ -38,6 +39,8 @@ public:
 	bool start();
 	bool stop();
 	bool isRunning();
+	void addLogHandler(std::function<void(int, const char *)> handler);
+	std::function<void(int, const char *)> onLog;
 };
 
 #endif

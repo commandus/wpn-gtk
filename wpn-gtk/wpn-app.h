@@ -42,6 +42,6 @@ protected:
 	void on_activate() override;
 private:
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
-	void createWindow();
+	void createTopWindow();
 	void onWindowHide(Gtk::Window* window);
 };
