@@ -1,9 +1,12 @@
 #ifndef TOPWINDOW_H
 #define	TOPWINDOW_H
 
+#include <functional>
 #include <gtkmm.h>
 #include "client-env.h"
 #include "log-window.h"
+
+	 using namespace std::placeholders; // for `_1`
 
 class TopWindow: public Gtk::Window {
 public:

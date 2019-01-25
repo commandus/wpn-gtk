@@ -125,7 +125,7 @@ TopWindow::~TopWindow() {
 void TopWindow::setClientEnv(ClientEnv* value)
 {
 	mClientEnv = value;
-	value->addLogHandler(TopWindow::onLog);
+	value->addLogHandler(std::bind(&TopWindow::onLog, this, _1, _2));
 }
 
 void TopWindow::onLog(int verbosity, const char *message)
