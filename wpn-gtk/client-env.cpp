@@ -241,6 +241,10 @@ void onNotify
 		<< msg->body << std::endl
 		<< std::endl;
 	}
+
+	ClientEnv* c = (ClientEnv*) env;
+	if (c->onNotify)
+		c->onNotify(persistent_id, from, appName, appId, sent, msg);
 }
 
 void onLogc
@@ -255,9 +259,43 @@ void onLogc
 		c->onLog(severity, message);
 }
 
+void onNotifyc
+(
+	void *env,
+	const char *persistent_id,
+	const char *from,
+	const char *appName,
+	const char *appId,
+	int64_t sent,
+	const NotifyMessageC *msg
+)
+{
+	ClientEnv* c = (ClientEnv*) env;
+	if (c->onNotify)
+		c->onNotify(persistent_id,
+			from,
+			appName,
+			appId,
+			sent,
+			msg
+		);
+}
+
 void ClientEnv::addLogHandler(std::function<void(int, const char *)> handler)
 {
 	onLog = handler;
+}
+
+void ClientEnv::addNotifyHandler(std::function<void(
+		const char *persistent_id,
+		const char *from,
+		const char *appName,
+		const char *appId,
+		int64_t sent,
+		const NotifyMessageC *msg
+	)> handler)
+{
+	onNotify = handler;
 }
 
 bool ClientEnv::start()
@@ -271,7 +309,7 @@ bool ClientEnv::start()
 		authSecret,
 		androidId,
 		securityToken,
-		onNotify,
+		onNotifyc,
 		this,
 		onLogc,
 		this,

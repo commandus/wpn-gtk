@@ -6,7 +6,9 @@
 #include "client-env.h"
 #include "log-window.h"
 
-	 using namespace std::placeholders; // for `_1`
+#include "mcs/mcsclient.h"
+
+using namespace std::placeholders; // for `_1`
 
 class TopWindow: public Gtk::Window {
 public:
@@ -39,6 +41,14 @@ protected:
 	ClientEnv *mClientEnv;
 	void onAboutDialogResponse(int responseId);
 	void onLog(int verbosity, const char *message);
+	void onNotify(
+		const char *persistent_id,
+		const char *from,
+		const char *appName,
+		const char *appId,
+		int64_t sent,
+		const NotifyMessageC *msg
+	);
 private:
 	Glib::RefPtr<Gtk::FileFilter> mFileFilterWPN;
 	Glib::RefPtr<Gio::SimpleActionGroup> mRefActionGroup;

@@ -56,9 +56,6 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	}
 	mRefBuilder->get_widget("checkmenuitemLog", mCheckMenuViewLog);
 
-	// GtkAccelGroup *accelGroup = gtk_accel_group_new();
-	// gtk_window_add_accel_group(GTK_WINDOW(this), accelGroup);
-	
 	mRefActionGroup = Gio::SimpleActionGroup::create();
 	mRefActionGroup->add_action("quit",
 		sigc::mem_fun(*this, &TopWindow::onFileQuit));
@@ -126,11 +123,53 @@ void TopWindow::setClientEnv(ClientEnv* value)
 {
 	mClientEnv = value;
 	value->addLogHandler(std::bind(&TopWindow::onLog, this, _1, _2));
+	value->addNotifyHandler(std::bind(&TopWindow::onNotify, this, _1, _2, _3, _4, _5, _6));
 }
 
 void TopWindow::onLog(int verbosity, const char *message)
 {
-	//
+	if (mLogWindow) {
+		mLogWindow->put(message);
+	}
+}
+
+void TopWindow::onNotify(
+		const char *persistent_id,
+		const char *from,
+		const char *appName,
+		const char *appId,
+		int64_t sent,
+		const NotifyMessageC *msg
+	)
+{
+	std::cerr << "Notify persistent id: " << persistent_id << std::endl;
+	std::string s = "";
+	if (msg)
+	{
+		s = msg->body;
+		/* const char *
+		authorizedEntity;	///< e.g. 246829423295
+		title;
+		body;
+		icon;				///< Specifies an icon filename or stock icon to display.
+		sound;				///< sound file name
+		link;				///< click action
+		linkType;			///< click action content type
+		category;
+		extra;
+		data;				///< extra data in JSON format
+		int urgency; 					///< low- 0, normal, critical
+		int timeout; 					///< timeout in milliseconds at which to expire the notification.
+		*/
+	}
+	std::cerr << std::endl;
+
+	if (mTreeViewMessage)
+	{
+		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
+			Gtk::TreeModel::Row row = *it;
+			row.set_value <Glib::ustring>(0, s);
+	}
 }
 
 bool TopWindow::on_key_press_event(GdkEventKey* event)
@@ -199,7 +238,7 @@ void TopWindow::onFileOpen()
 			break;
 		default:
 			break;
-	}	
+	}
 }
 
 void TopWindow::onFileNew()

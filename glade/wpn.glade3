@@ -16,27 +16,76 @@
   </object>
   <object class="GtkWindow" id="logWindow">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Log</property>
+    <property name="margin_top">6</property>
     <property name="default_width">640</property>
     <property name="default_height">480</property>
     <child>
-      <object class="GtkTreeView" id="treeviewLog">
+      <object class="GtkBox" id="boxLog">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="model">liststoreLog</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="treeviewSelectionLog"/>
-        </child>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkTreeViewColumn" id="treeviewcolumnLog">
-            <property name="title" translatable="yes">Line</property>
+          <object class="GtkMenuBar" id="menubarLog">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
-              <object class="GtkCellRendererText" id="cellrenderertextLog"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
+              <object class="GtkMenuItem" id="menuitemLog">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Log</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menuLog">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="resize_mode">immediate</property>
+                    <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitemLogClear">
+                        <property name="label">gtk-clear</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="action_name">log.clear</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <accelerator key="c" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTreeView" id="treeviewLog">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="model">liststoreLog</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="treeviewSelectionLog"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumnLog">
+                <property name="title" translatable="yes">Line</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertextLog"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -53,12 +102,12 @@
     <property name="default_width">640</property>
     <property name="default_height">480</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="boxTop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkMenuBar" id="menubar">
+          <object class="GtkMenuBar" id="menubarTop">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -206,10 +255,10 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkCheckMenuItem" id="checkmenuitemLog">
-                        <property name="label">_Log</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="action_name">wpn.log</property>
+                        <property name="label">_Log</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -249,7 +298,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkPaned" id="paned1">
+          <object class="GtkPaned" id="paned">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -328,7 +377,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkBox" id="boxTopBottom">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
