@@ -36,6 +36,7 @@ protected:
 	Glib::RefPtr<Gtk::TreeSelection> mTreeViewSelectionMessage;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreClient;
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreMessage;
+	Glib::RefPtr<Gtk::TreeModelFilter> mRefTreeModelFilterMessage;
 	Gtk::AboutDialog *mAboutDialog;
 	LogWindow *mLogWindow;
 	ClientEnv *mClientEnv;

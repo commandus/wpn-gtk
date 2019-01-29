@@ -84,6 +84,19 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mRefListStoreClient = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreClient"));
 	mRefListStoreMessage = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreMessage"));
 	
+	mRefTreeModelFilterMessage = Gtk::TreeModelFilter::create(mRefListStoreMessage);
+	mRefTreeModelFilterMessage->set_visible_func(
+	[this] (const Gtk::TreeModel::const_iterator& it) -> bool
+	{
+		if (!it)
+			return true;
+		Gtk::TreeModel::Row row = *it;
+		Glib::ustring v;
+		row.get_value(0, v);
+		return false;
+	});
+	mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
+
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
 	mTreeViewSelectionMessage = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionMessage"));
 
@@ -111,7 +124,8 @@ void TopWindow::onButtonClickSend(int n) {
 		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
 		if (iter) {
 			Gtk::TreeModel::Row row = *iter;
-			std::cout << row << std::endl;
+			Glib::ustring v;
+			row.get_value(0, v);
 		}
 	}
 }
@@ -169,6 +183,12 @@ void TopWindow::onNotify(
 		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
 			Gtk::TreeModel::Row row = *it;
 			row.set_value <Glib::ustring>(0, s);
+			row.set_value <Glib::rustring>(1, msg);
+			row.set_value <Glib::ustring>(2, persistent_id);
+			row.set_value <Glib::ustring>(3, from);
+			row.set_value <Glib::ustring>(4, appName);
+			row.set_value <Glib::ustring>(5, appId);
+			row.set_value <Glib::gint64>(6, sent);
 	}
 }
 
