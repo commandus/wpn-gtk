@@ -1,4 +1,4 @@
-/usr/local/lib
+../../wpn
 /usr/local/include
 /usr/include/gtkmm-3.0
 /usr/lib/x86_64-linux-gnu/gtkmm-3.0/include
