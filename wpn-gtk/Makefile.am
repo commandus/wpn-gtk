@@ -14,7 +14,8 @@ commonlibs = -L. -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib -lssl -lcrypt
 AM_CXXFLAGS = -std=c++11
 
 nobase_dist_include_HEADERS = \
-	top-window.h log-window.h wpn-app.h client-env.h
+	top-window.h log-window.h wpn-app.h client-env.h \
+	gnotification.h
 
 common_src =
 
@@ -24,6 +25,7 @@ common_src =
 wpn_gtk_SOURCES = \
 	wpn-gtk.cpp wpn-app.cpp \
 	top-window.cpp log-window.cpp client-env.cpp \
+	gnotification.cpp \
 	$(common_src)
 
 wpn_gtk_LDADD = -lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lglibmm-2.4 -lgtk-3 -lgdk-3 \

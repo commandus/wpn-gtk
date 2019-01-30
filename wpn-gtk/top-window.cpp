@@ -183,12 +183,14 @@ void TopWindow::onNotify(
 		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
 			Gtk::TreeModel::Row row = *it;
 			row.set_value <Glib::ustring>(0, s);
+			/*
 			row.set_value <Glib::rustring>(1, msg);
 			row.set_value <Glib::ustring>(2, persistent_id);
 			row.set_value <Glib::ustring>(3, from);
 			row.set_value <Glib::ustring>(4, appName);
 			row.set_value <Glib::ustring>(5, appId);
 			row.set_value <Glib::gint64>(6, sent);
+			*/
 	}
 }
 

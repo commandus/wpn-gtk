@@ -57,8 +57,6 @@ public:
 		int64_t sent,
 		const NotifyMessageC *msg
 	)> onNotify;
-	
-	
 };
 
 #endif
