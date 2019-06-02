@@ -1,8 +1,10 @@
 #include <iostream>
-#include "top-window.h"
-#include <gdk/gdkkeysyms.h>
 #include <sstream>
+#include <gdk/gdkkeysyms.h>
+#include <glog/logging.h>
+
 #include "google/protobuf/stubs/common.h"
+#include "top-window.h"
 #include "log-window.h"
 
 #define DLG_CAPTION_OPENFILE_ERROR "Error read wpn client file"
@@ -45,6 +47,7 @@ static std::string protobufVersion()
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
 	: Gtk::Window(cobject), mRefBuilder (refBuilder), mClientEnv(NULL), mLogWindow(NULL)
 {
+	LOG(INFO) << "TopWindow";
 	mLogWindow = 0;
 	mRefBuilder->get_widget_derived("logWindow", mLogWindow);
 	mLogWindow->setClientEnv(mClientEnv);
@@ -234,6 +237,7 @@ void TopWindow::onHelpAbout()
 
 void TopWindow::onFileQuit()
 {
+	LOG(INFO) << "Quit";
 	hide();
 }
 

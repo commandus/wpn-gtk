@@ -9,7 +9,7 @@ bin_PROGRAMS = \
 commoncppflags = -O2
 commoncppflags += -I/usr/local/include -I/usr/local/opt/openssl@1.1/include -I ../../wpn
 
-commonlibs = -L. -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto -lcurl -lece
+commonlibs = -L. -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto -lcurl -lece -lglog
 
 AM_CXXFLAGS = -std=c++11
 
