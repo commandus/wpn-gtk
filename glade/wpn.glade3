@@ -41,7 +41,6 @@
                   <object class="GtkMenu" id="menuLogEdit">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="resize_mode">immediate</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemLogClear">
                         <property name="label">gtk-clear</property>
@@ -165,13 +164,13 @@
                   <object class="GtkMenu" id="menuFile">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="resize_mode">immediate</property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitemFileNew">
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="action_name">wpn.new</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <property name="always_show_image">True</property>
                         <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -183,6 +182,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="action_name">wpn.open</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <property name="always_show_image">True</property>
                         <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -219,7 +219,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitemFile.quit">
+                      <object class="GtkImageMenuItem" id="imagemenuitemFileQuit">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>

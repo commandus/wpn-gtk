@@ -65,7 +65,7 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 		sigc::mem_fun(*this, &TopWindow::onHelpAbout));
 	mRefActionGroup->add_action("open",
 		sigc::mem_fun(*this, &TopWindow::onFileOpen));
-	mRefActionGroup->add_action("hew",
+	mRefActionGroup->add_action("new",
 		sigc::mem_fun(*this, &TopWindow::onFileNew));
 	mRefActionGroup->add_action("save",
 		sigc::mem_fun(*this, &TopWindow::onFileSave));
@@ -267,21 +267,21 @@ void TopWindow::onFileOpen()
 
 void TopWindow::onFileNew()
 {
-	std::cout << G_STRFUNC << std::endl;
+	LOG(INFO) << G_STRFUNC;
 	if (mClientEnv)
 		mClientEnv->newClientFile();
 }
 
 void TopWindow::onFileSave()
 {
-	std::cout << G_STRFUNC << std::endl;
+	LOG(INFO) << G_STRFUNC;
 	if (mClientEnv)
 		mClientEnv->saveClientFile();
 }
 
 void TopWindow::onFileSaveAs()
 {
-	std::cout << G_STRFUNC << std::endl;
+	LOG(INFO) << G_STRFUNC;
 	Gtk::FileChooserDialog dialog("Save file", Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dialog.set_transient_for(*this);
 	// Add response buttons the the dialog:
