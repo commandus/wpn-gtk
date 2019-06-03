@@ -19,6 +19,9 @@ nobase_dist_include_HEADERS = \
 
 common_src =
 
+resources.c : wpn-gtk.gresource.xml
+	glib-compile-resources wpn-gtk.gresource.xml --target=resources.c --generate-source
+	
 #
 #	wpn-gtk
 #
@@ -26,6 +29,7 @@ wpn_gtk_SOURCES = \
 	wpn-gtk.cpp wpn-app.cpp \
 	top-window.cpp log-window.cpp client-env.cpp \
 	gnotification.cpp \
+	resources.c \	
 	$(common_src)
 
 wpn_gtk_LDADD = -lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lglibmm-2.4 -lgtk-3 -lgdk-3 \
