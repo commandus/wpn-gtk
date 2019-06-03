@@ -12,7 +12,7 @@ Glib::RefPtr<WpnApplication> WpnApplication::create()
 {
 	return Glib::RefPtr<WpnApplication>(new WpnApplication());
 }
-
+	
 void WpnApplication::on_startup()
 {
 	// Call the base class's implementation:
@@ -20,7 +20,8 @@ void WpnApplication::on_startup()
 	mRefBuilder = Gtk::Builder::create();
 	try
 	{
-		mRefBuilder->add_from_file(UI_FILE);
+		// mRefBuilder->add_from_file(UI_FILE);
+		mRefBuilder->add_from_resource("/../glade/wpn.glade3");
 	}
 	catch (const Glib::Error& ex)
 	{

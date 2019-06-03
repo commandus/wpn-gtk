@@ -47,7 +47,6 @@ static std::string protobufVersion()
 TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> &refBuilder)
 	: Gtk::Window(cobject), mRefBuilder (refBuilder), mClientEnv(NULL), mLogWindow(NULL)
 {
-	LOG(INFO) << "TopWindow";
 	mLogWindow = 0;
 	mRefBuilder->get_widget_derived("logWindow", mLogWindow);
 	mLogWindow->setClientEnv(mClientEnv);
@@ -214,7 +213,7 @@ void TopWindow::onHelpAbout()
 {
 	mAboutDialog = new Gtk::AboutDialog();
 	mAboutDialog->set_transient_for(*this);
-	// mAboutDialog.set_logo(Gdk::Pixbuf::create_from_resource("/about/gtkmm_logo.gif", -1, 40, true));
+	mAboutDialog->set_logo(Gdk::Pixbuf::create_from_resource("/../glade/ic_launcher.png", -1, 40, true));
 	mAboutDialog->set_program_name("WPN for Linux");
 	mAboutDialog->set_version("1.0.0 " + protobufVersion());
 	mAboutDialog->set_copyright("Andrei Ivanov");
@@ -237,7 +236,6 @@ void TopWindow::onHelpAbout()
 
 void TopWindow::onFileQuit()
 {
-	LOG(INFO) << "Quit";
 	hide();
 }
 
