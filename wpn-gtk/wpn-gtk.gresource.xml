@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/">
+        <file>../glade/wpn.glade3</file>
+    </gresource>
+    <gresource prefix="/">
+        <file>../glade/ic_launcher.png</file>
+    </gresource>
+</gresources>
