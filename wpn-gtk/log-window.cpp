@@ -14,6 +14,7 @@ LogWindow::LogWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mTreeViewSelectionLog = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionLog"));
 
 	mRefActionGroup = Gio::SimpleActionGroup::create();
+	mRefActionGroup->add_action("close", sigc::mem_fun(*this, &LogWindow::onLogClose));
 	mRefActionGroup->add_action("clear", sigc::mem_fun(*this, &LogWindow::onLogClear));
 	insert_action_group("log", mRefActionGroup);
 }
@@ -55,4 +56,9 @@ void LogWindow::clear()
 void LogWindow::onLogClear()
 {
 	clear();
+}
+
+void LogWindow::onLogClose()
+{
+	hide();
 }

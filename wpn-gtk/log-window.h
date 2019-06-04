@@ -23,6 +23,7 @@ protected:
 	Glib::RefPtr<Gtk::ListStore> mRefListStoreLog;
 	ClientEnv* mClientEnv;
 	void onLogClear();
+	void onLogClose();
 };
 
 #endif
