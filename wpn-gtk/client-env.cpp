@@ -3,6 +3,8 @@
 #include "utilinstance.h"
 #include "endpoint.h"
 
+#define	EMPTY_LAST_PERSISTENT_ID		""
+
 #define WPNLIB 1
 #ifndef WPNLIB
 void *startClient
@@ -58,7 +60,7 @@ int writeConfig
 (
 	const std::string &filename,
 	enum VAPID_PROVIDER provider,
- 	const char* registrationIdC,
+ 	const char* registrationIdC,EMPTY_LAST_PERSISTENT_ID
 	const char* privateKeyC,
 	const char* publicKeyC,
 	const char* authSecretC,
@@ -102,8 +104,7 @@ ClientEnv::ClientEnv
 )
 	: verbosity(0), lastError(0), lastHttpCode(0), 
 	onLog(NULL),
-	registrationId(""), lastPersistentId(""), privateKey(""), 
-	publicKey(""), authSecret(""), androidId(0), securityToken(0), appId(""), 
+	config(NULL), 
 	client(NULL),
 	provider(PROVIDER_CHROME), clientFileName(""), hasClientFileName(false), isClientFileModified(false)
 {
@@ -163,51 +164,41 @@ bool ClientEnv::saveAsClientFile(const std::string &fileName)
 	return true;
 }
 
+/**
+ * 	std::string registrationId;
+	std::string lastPersistentId;
+	std::string privateKey;
+	std::string publicKey;
+	std::string authSecret;
+	uint64_t androidId;
+	uint64_t securityToken;
+	std::string appId;
+
+ */
 bool ClientEnv::read()
 {
 	// load config file
-	int r = readConfig(
-		clientFileName,
-		provider,
-		registrationId,
-		privateKey,
-		publicKey,
-		authSecret,
-		androidId,
-		securityToken,
-		appId,
-		lastPersistentId
-	);
-	return r == 0;
+	config = new ConfigFile(clientFileName);	
+	return true;
 }
 
 bool ClientEnv::genNew()
 {
-	appId = mkInstanceId();
-	// Initialize client
-	lastHttpCode = initClient(registrationId, privateKey, publicKey, authSecret, &androidId, &securityToken, appId, verbosity);
-	return  ((lastHttpCode >= 200) && (lastHttpCode <= 300));
+	if (config) {
+		delete config;
+		config = NULL;
+	}
+	config = new ConfigFile("");
 }
 
 bool ClientEnv::save()
 {
 	if (!hasClientFileName)
-		return false;	// save 
-	lastError = writeConfig(
-		clientFileName,
-		provider,
-		registrationId.c_str(),
-		privateKey.c_str(),
-		publicKey.c_str(),
-		authSecret.c_str(),
-		androidId,
-		securityToken,
-		appId,
-		lastPersistentId
-	);
-	if (lastError > 0)
-		lastError = 0;
-	return (lastError >= 0);
+		return false;
+	if (!config)
+		return false;
+	config->save();
+	return true;
 }
 
 void onNotify
@@ -302,20 +293,20 @@ bool ClientEnv::start()
 {
 	if (isRunning())
 		stop();
+	if (!config)
+		return false;
 	client = (MCSClient*) startClient(
 		&lastError,
-		lastPersistentId,
-		privateKey,
-		authSecret,
-		androidId,
-		securityToken,
-		onNotifyc,
-		this,
-		onLogc,
-		this,
+		EMPTY_LAST_PERSISTENT_ID,
+		config->wpnKeys->getPrivateKey(),
+		config->wpnKeys->getAuthSecret(),
+		config->androidCredentials->getAndroidId(),
+		config->androidCredentials->getSecurityToken(),
+		onNotifyc, this, onLogc, this,
 		verbosity
 	);
 	std::cerr << "Client started " << client << std::endl;
+	return true;
 }
 
 bool ClientEnv::stop()

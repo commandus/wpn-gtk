@@ -5,6 +5,7 @@
 #include <gtkmm.h>
 
 #include "utilfile.h"
+#include "wp-storage-file.h"
 #include "mcs/mcsclient.h"
 
 class ClientEnv: public Glib::Object {
@@ -13,14 +14,7 @@ private:
 	int lastHttpCode;
 	int lastError;
 protected:
-	std::string registrationId;
-	std::string lastPersistentId;
-	std::string privateKey;
-	std::string publicKey;
-	std::string authSecret;
-	uint64_t androidId;
-	uint64_t securityToken;
-	std::string appId;
+	ConfigFile *config;
 	MCSClient *client;
 public:
 	ClientEnv();
