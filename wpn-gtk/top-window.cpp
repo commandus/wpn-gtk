@@ -107,6 +107,8 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mFileFilterWPN = Gtk::FileFilter::create();
 	mFileFilterWPN->set_name("wpn client files");
 	mFileFilterWPN->add_mime_type("application/javascript");
+	
+	LOG(INFO) << "Main form created";
 }
 
 void TopWindow::onButtonClickSend(int n) {
@@ -137,9 +139,11 @@ TopWindow::~TopWindow() {
 
 void TopWindow::setClientEnv(ClientEnv* value)
 {
+	LOG(INFO) << G_STRFUNC; 
 	mClientEnv = value;
 	value->addLogHandler(std::bind(&TopWindow::onLog, this, _1, _2));
 	value->addNotifyHandler(std::bind(&TopWindow::onNotify, this, _1, _2, _3, _4, _5, _6));
+	reOpen();
 }
 
 void TopWindow::onLog(int verbosity, const char *message)
@@ -237,6 +241,38 @@ void TopWindow::onHelpAbout()
 void TopWindow::onFileQuit()
 {
 	hide();
+}
+
+/**
+ * 
+ * https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+ */
+inline bool fileExists
+(
+	const std::string& fn
+) {
+	struct stat buffer;   
+	return (stat (fn.c_str(), &buffer) == 0); 
+}
+
+// libwpnpp.a
+std::string getDefaultConfigFileName(const std::string &filename);
+
+void TopWindow::reOpen()
+{
+	LOG(INFO) << G_STRFUNC; 
+	if (mClientEnv) {
+		std::string fn = getDefaultConfigFileName(DEF_CONFIG_FILE_NAME);
+		if (fileExists(fn)) {
+			if (!mClientEnv->openClientFile(fn)) {
+				LOG(ERROR) << G_STRFUNC << " error open config file " << fn;
+			} else {
+				LOG(INFO) << G_STRFUNC << " open config file " << fn << " successfully";
+			}
+		} else {
+			LOG(INFO) << G_STRFUNC << " config file " << fn << " does not exists";
+		}
+	}
 }
 
 void TopWindow::onFileOpen()

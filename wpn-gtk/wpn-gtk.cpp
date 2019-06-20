@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
 	FLAGS_logtostderr = 1;
 	FLAGS_v = 3;
 	google::InitGoogleLogging(argv[0]);
-	
+	LOG(INFO) << "Running..";
 	Glib::RefPtr<WpnApplication> app = WpnApplication::create();
 	return app->run(argc, argv);
+	LOG(INFO) << "Stopped.";
 }

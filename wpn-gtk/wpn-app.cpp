@@ -1,6 +1,7 @@
 #include "wpn-app.h"
 #include "top-window.h"
 #include <iostream>
+#include <glog/logging.h>
 
 WpnApplication::WpnApplication()
 	: Gtk::Application("com.commandus.wpn")
@@ -20,12 +21,14 @@ void WpnApplication::on_startup()
 	mRefBuilder = Gtk::Builder::create();
 	try
 	{
-		// mRefBuilder->add_from_file(UI_FILE);
-		mRefBuilder->add_from_resource("/../glade/wpn.glade3");
+		// remove resource.c, make or rebuild resource.c manually:
+		// glib-compile-resources wpn-gtk.gresource.xml --target=resources.c --generate-source
+		LOG(INFO) << "Load form";
+		mRefBuilder->add_from_resource(RES_GLADE3);
 	}
 	catch (const Glib::Error& ex)
 	{
-		std::cerr << "Building menus failed: " << ex.what();
+		LOG(ERROR) << "Building menus failed: " << ex.what();
 	}
 }
 

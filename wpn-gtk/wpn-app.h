@@ -28,7 +28,7 @@
 #include <gtkmm.h>
 #include "client-env.h"
 
-#define UI_FILE "../glade/wpn.glade3"
+#define RES_GLADE3				"/../glade/wpn.glade3"
 
 class WpnApplication : public Gtk::Application
 {

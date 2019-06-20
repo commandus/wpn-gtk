@@ -8,6 +8,8 @@
 
 #include "mcs/mcsclient.h"
 
+#define DEF_CONFIG_FILE_NAME	".wpn.js"
+
 using namespace std::placeholders; // for `_1`
 
 class TopWindow: public Gtk::Window {
@@ -17,6 +19,7 @@ public:
 	virtual ~TopWindow();
 	void setClientEnv(ClientEnv *value);
 protected:
+	void reOpen();
 	void onButtonClickSend(int);
 	bool on_key_press_event(GdkEventKey *event) override;
 	void onHelpAbout();

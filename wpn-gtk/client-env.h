@@ -10,25 +10,31 @@
 
 class ClientEnv: public Glib::Object {
 private:
-	int verbosity;
-	int lastHttpCode;
 	int lastError;
 protected:
-	ConfigFile *config;
 	MCSClient *client;
 public:
-	ClientEnv();
-	~ClientEnv();
-	enum VAPID_PROVIDER provider;
-	std::string clientFileName;
+	ConfigFile *config;
+	std::function<void(int, const char *)> onLog;
+	std::function<void(
+		const char *persistent_id,
+		const char *from,
+		const char *appName,
+		const char *appId,
+		int64_t sent,
+		const NotifyMessageC *msg
+	)> onNotify;
 	bool hasClientFileName;
 	bool isClientFileModified;
+	
+	ClientEnv();
+	ClientEnv(const std::string &fileName);
+	~ClientEnv();
 	bool newClientFile();
 	bool openClientFile(const std::string &fileName);
 	bool saveClientFile();
 	bool saveAsClientFile(const std::string &fileName);
 	bool genNew();
-	bool read();
 	bool save();
 	bool start();
 	bool stop();
@@ -42,15 +48,6 @@ public:
 		int64_t sent,
 		const NotifyMessageC *msg
 	)> handler);
-	std::function<void(int, const char *)> onLog;
-	std::function<void(
-		const char *persistent_id,
-		const char *from,
-		const char *appName,
-		const char *appId,
-		int64_t sent,
-		const NotifyMessageC *msg
-	)> onNotify;
 };
 
 #endif
