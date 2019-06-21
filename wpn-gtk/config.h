@@ -77,7 +77,7 @@
 #define PACKAGE_NAME "wpn-gtk"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "wpn-gtk 0.1"
+#define PACKAGE_STRING "wpn-gtk 0.2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "wpn-gtk"
@@ -86,7 +86,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.1"
+#define PACKAGE_VERSION "0.2"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

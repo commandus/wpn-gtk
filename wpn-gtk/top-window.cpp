@@ -7,6 +7,10 @@
 #include "top-window.h"
 #include "log-window.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #define DLG_CAPTION_OPENFILE_ERROR "Error read wpn client file"
 
 #define MIT_LICENSE "Copyright (c) 2019 Andrei Ivanov \n\n\
@@ -139,7 +143,6 @@ TopWindow::~TopWindow() {
 
 void TopWindow::setClientEnv(ClientEnv* value)
 {
-	LOG(INFO) << G_STRFUNC; 
 	mClientEnv = value;
 	value->addLogHandler(std::bind(&TopWindow::onLog, this, _1, _2));
 	value->addNotifyHandler(std::bind(&TopWindow::onNotify, this, _1, _2, _3, _4, _5, _6));
@@ -162,27 +165,40 @@ void TopWindow::onNotify(
 		const NotifyMessageC *msg
 	)
 {
-	std::cerr << "Notify persistent id: " << persistent_id << std::endl;
-	std::string s = "";
-	if (msg)
-	{
-		s = msg->body;
-		/* const char *
-		authorizedEntity;	///< e.g. 246829423295
-		title;
-		body;
-		icon;				///< Specifies an icon filename or stock icon to display.
-		sound;				///< sound file name
-		link;				///< click action
-		linkType;			///< click action content type
-		category;
-		extra;
-		data;				///< extra data in JSON format
-		int urgency; 					///< low- 0, normal, critical
-		int timeout; 					///< timeout in milliseconds at which to expire the notification.
-		*/
+	Subscription *subscription = NULL;
+	if (mClientEnv) {
+		subscription = mClientEnv->config->subscriptions->findByPublicKey(from);
 	}
-	std::cerr << std::endl;
+	std::string clientName = "anonymous";
+	if (subscription) {
+		clientName = subscription->getName();
+		if (clientName.empty()) {
+			if (subscription->getWpnKeysPtr()->id)
+				clientName = std::to_string(subscription->getWpnKeysPtr()->id);
+		}
+	}
+	if (msg) {
+		LOG(INFO) << "Notify persistent id: " << persistent_id
+			<< " from: " << clientName
+			<< ", appId: " << appId << "(" << appName << "), sent: " << sent
+			<< ", authorizedEntity: " << msg->authorizedEntity
+			<< ", title: " << msg->title
+			<< ", body: " << msg->body
+			<< ", icon: " << msg->icon				///< Specifies an icon filename or stock icon to display.
+			<< ", sound: " << msg->sound			///< sound file name
+			<< ", link: " << msg->link				///< click action
+			<< ", linkType: " << msg->linkType		///< click action content type
+			<< ", category: " << msg->category
+			<< ", extra: " << msg->extra
+			<< ", data: " << msg->data				///< extra data in JSON format
+			<< ", urgency: " << msg->urgency 		///< low- 0, normal, critical
+			<< ", timeout: " << msg->timeout;		///< timeout in milliseconds at which to expire the notification.
+	}
+
+	std::string s = "";
+	if (msg) {
+		s = msg->body;
+	}
 
 	if (mTreeViewMessage)
 	{
@@ -218,8 +234,14 @@ void TopWindow::onHelpAbout()
 	mAboutDialog = new Gtk::AboutDialog();
 	mAboutDialog->set_transient_for(*this);
 	mAboutDialog->set_logo(Gdk::Pixbuf::create_from_resource("/../glade/ic_launcher.png", -1, 40, true));
-	mAboutDialog->set_program_name("WPN for Linux");
-	mAboutDialog->set_version("1.0.0 " + protobufVersion());
+	mAboutDialog->set_program_name("wpn for Linux desktop");
+	std::string v;
+#ifdef HAVE_CONFIG_H
+	v = PACKAGE_STRING;
+#else	
+	v = "Custom build";
+#endif
+	mAboutDialog->set_version(v + ", " + protobufVersion());
 	mAboutDialog->set_copyright("Andrei Ivanov");
 	mAboutDialog->set_comments("Linux wpn client");
 	mAboutDialog->set_license(MIT_LICENSE);
