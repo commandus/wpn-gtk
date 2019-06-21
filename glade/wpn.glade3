@@ -141,7 +141,27 @@
       <!-- column-name appId -->
       <column type="gchararray"/>
       <!-- column-name sent -->
-      <column type="gint64"/>
+      <column type="guint64"/>
+      <!-- column-name title -->
+      <column type="gchararray"/>
+      <!-- column-name icon -->
+      <column type="gchararray"/>
+      <!-- column-name sound -->
+      <column type="gchararray"/>
+      <!-- column-name link -->
+      <column type="gchararray"/>
+      <!-- column-name linkType -->
+      <column type="gchararray"/>
+      <!-- column-name category -->
+      <column type="gchararray"/>
+      <!-- column-name extra -->
+      <column type="gchararray"/>
+      <!-- column-name data -->
+      <column type="gchararray"/>
+      <!-- column-name urgency -->
+      <column type="gint"/>
+      <!-- column-name timeout -->
+      <column type="guint64"/>
     </columns>
   </object>
   <object class="GtkWindow" id="topWindow">
@@ -410,6 +430,7 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumnMessage">
                         <property name="resizable">True</property>
+                        <property name="sizing">autosize</property>
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Сообщение</property>
                         <child>
