@@ -34,8 +34,7 @@ void LogWindow::put(const std::string &value)
 	{
 		mLogBuffer << value.substr(0, p - 1);
 		std::string s = mLogBuffer.str();
-		if (!s.empty() &&  mRefListStoreLog) 
-		{
+		if (!s.empty() &&  mRefListStoreLog) {
 			Gtk::TreeModel::iterator it = mRefListStoreLog->append();
 			Gtk::TreeModel::Row row = *it;
 			row.set_value <Glib::ustring>(0, s);

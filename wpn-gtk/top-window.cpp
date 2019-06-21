@@ -101,7 +101,7 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 		row.get_value(0, v);
 		return false;
 	});
-	mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
+	// mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
 
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
 	mTreeViewSelectionMessage = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionMessage"));
@@ -111,8 +111,6 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mFileFilterWPN = Gtk::FileFilter::create();
 	mFileFilterWPN->set_name("wpn client files");
 	mFileFilterWPN->add_mime_type("application/javascript");
-	
-	LOG(INFO) << "Main form created";
 }
 
 void TopWindow::onButtonClickSend(int n) {
@@ -122,9 +120,8 @@ void TopWindow::onButtonClickSend(int n) {
 	}
 	mEntryMessage->set_text("");
 	
-	if (mRefListStoreMessage) {
-		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
-		Gtk::TreeModel::Row row = *it;
+	if (mRefListStoreMessage && !v.empty()) {
+		Gtk::TreeModel::Row row = *mRefListStoreMessage->append();
 		row.set_value <Glib::ustring>(0, v); 
 	}
 
@@ -134,6 +131,9 @@ void TopWindow::onButtonClickSend(int n) {
 			Gtk::TreeModel::Row row = *iter;
 			Glib::ustring v;
 			row.get_value(0, v);
+			Glib::ustring from;
+			row.get_value(3, from);
+			LOG(INFO) << "Selected " << v << " from: " << from;
 		}
 	}
 }
@@ -195,24 +195,40 @@ void TopWindow::onNotify(
 			<< ", timeout: " << msg->timeout;		///< timeout in milliseconds at which to expire the notification.
 	}
 
-	std::string s = "";
-	if (msg) {
-		s = msg->body;
-	}
-
-	if (mTreeViewMessage)
+	if (mTreeViewMessage && msg)
 	{
 		Gtk::TreeModel::iterator it = mRefListStoreMessage->append();
 			Gtk::TreeModel::Row row = *it;
-			row.set_value <Glib::ustring>(0, s);
-			/*
-			row.set_value <Glib::rustring>(1, msg);
-			row.set_value <Glib::ustring>(2, persistent_id);
-			row.set_value <Glib::ustring>(3, from);
-			row.set_value <Glib::ustring>(4, appName);
-			row.set_value <Glib::ustring>(5, appId);
-			row.set_value <Glib::gint64>(6, sent);
-			*/
+			row.set_value <Glib::ustring>(0, msg->body);
+			// row.set_value <Glib::rustring>(1, msg);
+			if (persistent_id)
+				row.set_value <Glib::ustring>(2, persistent_id);
+			if (from)
+				row.set_value <Glib::ustring>(3, from);
+			if (appName)
+				row.set_value <Glib::ustring>(4, appName);
+			if (appId)
+				row.set_value <Glib::ustring>(5, appId);
+			row.set_value <unsigned long>(6, sent);
+			// message
+			if (msg->title)
+				row.set_value <Glib::ustring>(7, msg->title);
+			if (msg->icon)
+				row.set_value <Glib::ustring>(8, msg->icon);
+			if (msg->sound)
+				row.set_value <Glib::ustring>(9, msg->sound);
+			if (msg->link)
+				row.set_value <Glib::ustring>(10, msg->link);
+			if (msg->linkType)
+				row.set_value <Glib::ustring>(11, msg->linkType);
+			if (msg->category)
+				row.set_value <Glib::ustring>(12, msg->category);
+			if (msg->extra)
+				row.set_value <Glib::ustring>(13, msg->extra);
+			if (msg->data)
+				row.set_value <Glib::ustring>(14, msg->data);
+			row.set_value <int>(15, msg->urgency);
+			row.set_value <unsigned long>(16, msg->timeout);
 	}
 }
 
