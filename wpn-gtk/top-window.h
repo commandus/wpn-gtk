@@ -53,6 +53,10 @@ protected:
 		int64_t sent,
 		const NotifyMessageC *msg
 	);
+	void loadClients(
+		Glib::RefPtr<Gtk::ListStore> listStore,
+		ConfigFile *config
+	);
 private:
 	Glib::RefPtr<Gtk::FileFilter> mFileFilterWPN;
 	Glib::RefPtr<Gio::SimpleActionGroup> mRefActionGroup;

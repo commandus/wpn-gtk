@@ -53,7 +53,6 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 {
 	mLogWindow = 0;
 	mRefBuilder->get_widget_derived("logWindow", mLogWindow);
-	mLogWindow->setClientEnv(mClientEnv);
 	mLogWindow->signal_hide().connect(sigc::bind<Gtk::Window *>(
 		sigc::mem_fun(*this, &TopWindow::onWindowHideLog), mLogWindow));
 
@@ -141,12 +140,43 @@ void TopWindow::onButtonClickSend(int n) {
 TopWindow::~TopWindow() {
 }
 
+void TopWindow::loadClients(
+	Glib::RefPtr<Gtk::ListStore> listStore,
+	ConfigFile *config
+) 
+{
+LOG(INFO) << 1;	
+	if (!listStore)
+		return;
+LOG(INFO) << 2;	
+	// TODO clear
+	if (!config)
+		return;
+LOG(INFO) << 3;	
+	for (std::vector<Subscription>::const_iterator it(config->subscriptions->list.begin()); it!= config->subscriptions->list.end(); ++it) {
+LOG(INFO) << 4;		
+		Gtk::TreeModel::Row row = *listStore->append();
+		std::string name;
+		name = it->getName();
+		if (name.empty())
+			name = "noname";
+		std::stringstream n;
+		n << it->getWpnKeys().id << "(" << name << ")";
+		row.set_value <Glib::ustring>(0, n.str()); 
+	}
+LOG(INFO) << 5;	
+}
+
 void TopWindow::setClientEnv(ClientEnv* value)
 {
 	mClientEnv = value;
 	value->addLogHandler(std::bind(&TopWindow::onLog, this, _1, _2));
 	value->addNotifyHandler(std::bind(&TopWindow::onNotify, this, _1, _2, _3, _4, _5, _6));
 	reOpen();
+	loadClients(
+		mRefListStoreClient,
+		mClientEnv->config
+	);
 }
 
 void TopWindow::onLog(int verbosity, const char *message)
@@ -298,14 +328,13 @@ std::string getDefaultConfigFileName(const std::string &filename);
 
 void TopWindow::reOpen()
 {
-	LOG(INFO) << G_STRFUNC; 
 	if (mClientEnv) {
 		std::string fn = getDefaultConfigFileName(DEF_CONFIG_FILE_NAME);
 		if (fileExists(fn)) {
 			if (!mClientEnv->openClientFile(fn)) {
 				LOG(ERROR) << G_STRFUNC << " error open config file " << fn;
 			} else {
-				LOG(INFO) << G_STRFUNC << " open config file " << fn << " successfully";
+//				LOG(INFO) << G_STRFUNC << " open config file " << fn << " successfully";
 			}
 		} else {
 			LOG(INFO) << G_STRFUNC << " config file " << fn << " does not exists";
