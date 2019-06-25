@@ -80,8 +80,7 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
  
 	mRefBuilder->get_widget("buttonSend", mButtonSend);
 	if (mButtonSend) {
-		mButtonSend->signal_clicked().connect(
-			sigc::bind<int> (sigc::mem_fun(*this, &TopWindow::onButtonClickSend), 0));
+		mButtonSend->signal_clicked().connect(sigc::mem_fun(*this, &TopWindow::onButtonClickSend));
 	}
 	mRefBuilder->get_widget("treeviewClient", mTreeViewClient);
 	mRefBuilder->get_widget("treeviewMessage", mTreeViewMessage);
@@ -103,8 +102,16 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	// mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
 
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
-	mTreeViewSelectionMessage = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionMessage"));
+	
+	// gulong changed_id changed_id = g_signal_connect(mTreeViewSelectionClient, "changed", );
 
+	mTreeViewSelectionClient->signal_changed().connect(
+			sigc::bind <Glib::RefPtr<Gtk::TreeSelection>> (sigc::mem_fun(*this, &TopWindow::onClientSelected), mTreeViewSelectionClient));
+
+	mTreeViewSelectionMessage = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionMessage"));
+	mTreeViewSelectionMessage->signal_changed().connect(
+			sigc::bind <Glib::RefPtr<Gtk::TreeSelection>> (sigc::mem_fun(*this, &TopWindow::onMessageSelected), mTreeViewSelectionMessage));
+	
 	add_events(Gdk::KEY_PRESS_MASK);
 
 	mFileFilterWPN = Gtk::FileFilter::create();
@@ -112,13 +119,71 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	mFileFilterWPN->add_mime_type("application/javascript");
 }
 
-void TopWindow::onButtonClickSend(int n) {
+/**
+ * Columns:
+ * 0  name
+ * 1  id
+ * 2  publicKey
+ */
+void TopWindow::onClientSelected(
+	Glib::RefPtr<Gtk::TreeSelection> selection
+) {
+	if (selection) {
+		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
+		if (iter) {
+			Gtk::TreeModel::Row row = *iter;
+			Glib::ustring v;
+			row.get_value(0, v);
+			Glib::ustring from;
+			row.get_value(3, from);
+			LOG(INFO) << "Selected " << v << " from: " << from;
+		}
+	}
+}
+
+/**
+ * Columns:
+ * 0  message
+ * 1  msg NULL
+ * 2  persistent_id
+ * 3  from
+ * 4  appName
+ * 5  appId
+ * 6  sent
+ * 7  title
+ * 8  icon
+ * 9  sound
+ * 10 link
+ * 11 linkType
+ * 12 category
+ * 13 extra
+ * 14 data
+ * 15 urgency
+ * 16 timeout
+ */
+void TopWindow::onMessageSelected(
+	Glib::RefPtr<Gtk::TreeSelection> selection
+) {
+	if (selection) {
+		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
+		if (iter) {
+			Gtk::TreeModel::Row row = *iter;
+			Glib::ustring v;
+			row.get_value(0, v);
+			Glib::ustring from;
+			row.get_value(3, from);
+			LOG(INFO) << "Selected " << v << " from: " << from;
+		}
+	}
+}
+
+void TopWindow::onButtonClickSend() {
 	std::string v = "";
 	if (mEntryMessage) {
 		v = mEntryMessage->get_text();
 	}
 	mEntryMessage->set_text("");
-	
+
 	if (mRefListStoreMessage && !v.empty()) {
 		Gtk::TreeModel::Row row = *mRefListStoreMessage->append();
 		row.set_value <Glib::ustring>(0, v); 
@@ -140,21 +205,23 @@ void TopWindow::onButtonClickSend(int n) {
 TopWindow::~TopWindow() {
 }
 
+/**
+ * Columns:
+ * 0  name
+ * 1  id
+ * 2  publicKey
+ */
 void TopWindow::loadClients(
 	Glib::RefPtr<Gtk::ListStore> listStore,
 	ConfigFile *config
 ) 
 {
-LOG(INFO) << 1;	
 	if (!listStore)
 		return;
-LOG(INFO) << 2;	
-	// TODO clear
+	listStore->clear();
 	if (!config)
 		return;
-LOG(INFO) << 3;	
 	for (std::vector<Subscription>::const_iterator it(config->subscriptions->list.begin()); it!= config->subscriptions->list.end(); ++it) {
-LOG(INFO) << 4;		
 		Gtk::TreeModel::Row row = *listStore->append();
 		std::string name;
 		name = it->getName();
@@ -162,9 +229,10 @@ LOG(INFO) << 4;
 			name = "noname";
 		std::stringstream n;
 		n << it->getWpnKeys().id << "(" << name << ")";
-		row.set_value <Glib::ustring>(0, n.str()); 
+		row.set_value <Glib::ustring>(0, n.str());
+		row.set_value <guint64>(1, it->getWpnKeys().id);
+		row.set_value <Glib::ustring>(2, it->getWpnKeys().getPublicKey());
 	}
-LOG(INFO) << 5;	
 }
 
 void TopWindow::setClientEnv(ClientEnv* value)
@@ -267,7 +335,7 @@ bool TopWindow::on_key_press_event(GdkEventKey* event)
 	switch (event->keyval)
 	{
 		case GDK_KEY_Return:
-			this->onButtonClickSend(0);
+			this->onButtonClickSend();
 			break;
 		default:
 			return Gtk::Window::on_key_press_event(event);

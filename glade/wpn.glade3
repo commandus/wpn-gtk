@@ -6,6 +6,10 @@
     <columns>
       <!-- column-name name -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="guint64"/>
+      <!-- column-name publicKey -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststoreLog">
@@ -434,7 +438,10 @@
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Сообщение</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertextName"/>
+                          <object class="GtkCellRendererText" id="cellrenderertextName">
+                            <property name="wrap_mode">word</property>
+                            <property name="wrap_width">300</property>
+                          </object>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>

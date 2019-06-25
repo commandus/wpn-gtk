@@ -20,7 +20,7 @@ public:
 	void setClientEnv(ClientEnv *value);
 protected:
 	void reOpen();
-	void onButtonClickSend(int);
+	void onButtonClickSend();
 	bool on_key_press_event(GdkEventKey *event) override;
 	void onHelpAbout();
 	void onFileQuit();
@@ -29,6 +29,8 @@ protected:
 	void onFileSave();
 	void onFileSaveAs();
 	void onViewLog();
+	void onClientSelected(Glib::RefPtr<Gtk::TreeSelection> selection);
+	void onMessageSelected(Glib::RefPtr<Gtk::TreeSelection> selection);
 	Glib::RefPtr<Gtk::Builder> mRefBuilder;
 	Gtk::Entry *mEntryMessage;
 	Gtk::Button *mButtonSend;
