@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define DEF_NAME_ALL	"All"
+
 #define DLG_CAPTION_OPENFILE_ERROR "Error read wpn client file"
 
 #define MIT_LICENSE "Copyright (c) 2019 Andrei Ivanov \n\n\
@@ -102,9 +104,6 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 	// mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
 
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
-	
-	// gulong changed_id changed_id = g_signal_connect(mTreeViewSelectionClient, "changed", );
-
 	mTreeViewSelectionClient->signal_changed().connect(
 			sigc::bind <Glib::RefPtr<Gtk::TreeSelection>> (sigc::mem_fun(*this, &TopWindow::onClientSelected), mTreeViewSelectionClient));
 
@@ -129,14 +128,16 @@ void TopWindow::onClientSelected(
 	Glib::RefPtr<Gtk::TreeSelection> selection
 ) {
 	if (selection) {
-		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
+		Gtk::TreeModel::iterator iter = selection->get_selected();
 		if (iter) {
 			Gtk::TreeModel::Row row = *iter;
 			Glib::ustring v;
 			row.get_value(0, v);
-			Glib::ustring from;
-			row.get_value(3, from);
-			LOG(INFO) << "Selected " << v << " from: " << from;
+			guint64 id = 0;
+			row.get_value(1, id);
+			Glib::ustring key;
+			row.get_value(2, key);
+			LOG(INFO) << "Selected " << v << ", id: " << id << ", public key: " << key;
 		}
 	}
 }
@@ -165,7 +166,7 @@ void TopWindow::onMessageSelected(
 	Glib::RefPtr<Gtk::TreeSelection> selection
 ) {
 	if (selection) {
-		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
+		Gtk::TreeModel::iterator iter = selection->get_selected();
 		if (iter) {
 			Gtk::TreeModel::Row row = *iter;
 			Glib::ustring v;
@@ -188,18 +189,6 @@ void TopWindow::onButtonClickSend() {
 		Gtk::TreeModel::Row row = *mRefListStoreMessage->append();
 		row.set_value <Glib::ustring>(0, v); 
 	}
-
-	if (mTreeViewSelectionMessage) {
-		Gtk::TreeModel::iterator iter = mTreeViewSelectionMessage->get_selected();
-		if (iter) {
-			Gtk::TreeModel::Row row = *iter;
-			Glib::ustring v;
-			row.get_value(0, v);
-			Glib::ustring from;
-			row.get_value(3, from);
-			LOG(INFO) << "Selected " << v << " from: " << from;
-		}
-	}
 }
 
 TopWindow::~TopWindow() {
@@ -221,6 +210,12 @@ void TopWindow::loadClients(
 	listStore->clear();
 	if (!config)
 		return;
+
+	Gtk::TreeModel::Row row = *listStore->append();
+	row.set_value <Glib::ustring>(0, DEF_NAME_ALL);
+	row.set_value(1, 0);
+	row.set_value <Glib::ustring>(2, "*");
+
 	for (std::vector<Subscription>::const_iterator it(config->subscriptions->list.begin()); it!= config->subscriptions->list.end(); ++it) {
 		Gtk::TreeModel::Row row = *listStore->append();
 		std::string name;
@@ -230,7 +225,8 @@ void TopWindow::loadClients(
 		std::stringstream n;
 		n << it->getWpnKeys().id << "(" << name << ")";
 		row.set_value <Glib::ustring>(0, n.str());
-		row.set_value <guint64>(1, it->getWpnKeys().id);
+		guint64 id = it->getWpnKeys().id;
+		row.set_value(1, id);
 		row.set_value <Glib::ustring>(2, it->getWpnKeys().getPublicKey());
 	}
 }

@@ -7,7 +7,7 @@
       <!-- column-name name -->
       <column type="gchararray"/>
       <!-- column-name id -->
-      <column type="guint64"/>
+      <column type="gulong"/>
       <!-- column-name publicKey -->
       <column type="gchararray"/>
     </columns>
@@ -145,7 +145,7 @@
       <!-- column-name appId -->
       <column type="gchararray"/>
       <!-- column-name sent -->
-      <column type="guint64"/>
+      <column type="gulong"/>
       <!-- column-name title -->
       <column type="gchararray"/>
       <!-- column-name icon -->
@@ -165,7 +165,7 @@
       <!-- column-name urgency -->
       <column type="gint"/>
       <!-- column-name timeout -->
-      <column type="guint64"/>
+      <column type="gulong"/>
     </columns>
   </object>
   <object class="GtkWindow" id="topWindow">
@@ -403,7 +403,7 @@
                         <property name="min_width">100</property>
                         <property name="title" translatable="yes">Клиент</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertextMessage"/>
+                          <object class="GtkCellRendererText" id="cellrenderertextClient"/>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>
