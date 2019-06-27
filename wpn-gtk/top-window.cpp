@@ -89,19 +89,25 @@ TopWindow::TopWindow (BaseObjectType *cobject, const Glib::RefPtr<Gtk::Builder> 
 
 	mRefListStoreClient = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreClient"));
 	mRefListStoreMessage = Glib::RefPtr<Gtk::ListStore>::cast_static(mRefBuilder->get_object("liststoreMessage"));
-	
+
 	mRefTreeModelFilterMessage = Gtk::TreeModelFilter::create(mRefListStoreMessage);
 	mRefTreeModelFilterMessage->set_visible_func(
 	[this] (const Gtk::TreeModel::const_iterator& it) -> bool
 	{
-		if (!it)
-			return true;
 		Gtk::TreeModel::Row row = *it;
-		Glib::ustring v;
-		row.get_value(0, v);
-		return false;
+		Glib::ustring from;
+		row.get_value(3, from);
+		Gtk::TreeModel::iterator iter = mTreeViewSelectionClient->get_selected();
+		if (iter) {
+			Gtk::TreeModel::Row row = *iter;
+			Glib::ustring key;
+			row.get_value(2, key);
+			return key == from || key == "*";
+		}
+		return true;
 	});
-	// mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
+	
+	mTreeViewMessage->set_model(mRefTreeModelFilterMessage);
 
 	mTreeViewSelectionClient = Glib::RefPtr<Gtk::TreeSelection>::cast_static(mRefBuilder->get_object("treeviewSelectionClient"));
 	mTreeViewSelectionClient->signal_changed().connect(
@@ -133,11 +139,11 @@ void TopWindow::onClientSelected(
 			Gtk::TreeModel::Row row = *iter;
 			Glib::ustring v;
 			row.get_value(0, v);
-			guint64 id = 0;
+			guint64 id;
 			row.get_value(1, id);
-			Glib::ustring key;
-			row.get_value(2, key);
-			LOG(INFO) << "Selected " << v << ", id: " << id << ", public key: " << key;
+			LOG(INFO) << "Selected " << v << ", id: " << id;
+			// reload message tree view
+			mRefTreeModelFilterMessage->refilter();
 		}
 	}
 }
@@ -161,6 +167,8 @@ void TopWindow::onClientSelected(
  * 14 data
  * 15 urgency
  * 16 timeout
+ * 17 fromId
+ * 18 fromName
  */
 void TopWindow::onMessageSelected(
 	Glib::RefPtr<Gtk::TreeSelection> selection
@@ -171,9 +179,11 @@ void TopWindow::onMessageSelected(
 			Gtk::TreeModel::Row row = *iter;
 			Glib::ustring v;
 			row.get_value(0, v);
-			Glib::ustring from;
-			row.get_value(3, from);
-			LOG(INFO) << "Selected " << v << " from: " << from;
+			Glib::ustring fromName;
+			row.get_value(18, fromName);
+			guint64 fromId;
+			row.get_value(17, fromId);
+			LOG(INFO) << "Selected " << v << " from: " << fromName << " " << fromId;
 		}
 	}
 }
@@ -264,11 +274,12 @@ void TopWindow::onNotify(
 		subscription = mClientEnv->config->subscriptions->findByPublicKey(from);
 	}
 	std::string clientName = "anonymous";
+	uint64 clientId = 0;
 	if (subscription) {
+		clientId = subscription->getWpnKeysPtr()->id;
 		clientName = subscription->getName();
 		if (clientName.empty()) {
-			if (subscription->getWpnKeysPtr()->id)
-				clientName = std::to_string(subscription->getWpnKeysPtr()->id);
+			clientName = std::to_string(clientId);
 		}
 	}
 	if (msg) {
@@ -286,7 +297,9 @@ void TopWindow::onNotify(
 			<< ", extra: " << msg->extra
 			<< ", data: " << msg->data				///< extra data in JSON format
 			<< ", urgency: " << msg->urgency 		///< low- 0, normal, critical
-			<< ", timeout: " << msg->timeout;		///< timeout in milliseconds at which to expire the notification.
+			<< ", timeout: " << msg->timeout		///< timeout in milliseconds at which to expire the notification.
+			<< ", clientId: " << clientId			///< service registry client id
+			<< ", clientName: " << clientName;		///< service registry client name
 	}
 
 	if (mTreeViewMessage && msg)
@@ -321,8 +334,10 @@ void TopWindow::onNotify(
 				row.set_value <Glib::ustring>(13, msg->extra);
 			if (msg->data)
 				row.set_value <Glib::ustring>(14, msg->data);
-			row.set_value <int>(15, msg->urgency);
-			row.set_value <unsigned long>(16, msg->timeout);
+			row.set_value (15, msg->urgency);
+			row.set_value (16, msg->timeout);
+			row.set_value (17, clientId);
+			row.set_value <Glib::ustring>(18, clientName);
 	}
 }
 

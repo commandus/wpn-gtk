@@ -166,6 +166,10 @@
       <column type="gint"/>
       <!-- column-name timeout -->
       <column type="gulong"/>
+      <!-- column-name fromId -->
+      <column type="gulong"/>
+      <!-- column-name fromName -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkWindow" id="topWindow">
